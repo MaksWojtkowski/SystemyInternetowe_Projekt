@@ -20,3 +20,111 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+:root {
+  --ap-bg:        #0a0a0f;
+  --ap-surface:   #13131c;
+  --ap-border:    #1e1e2e;
+  --ap-accent:    #00e5ff;
+  --ap-accent2:   #ff2d78;
+  --ap-text:      #e2e2ec;
+  --ap-muted:     #6b6b85;
+  --ap-font-game: 'Press Start 2P', monospace;
+  --ap-font-ui:   'DM Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  background: var(--ap-bg);
+  color: var(--ap-text);
+  font-family: var(--ap-font-ui);
+  min-height: 100vh;
+  margin: 0;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0,0,0,.08) 2px,
+          rgba(0,0,0,.08) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.ap-navbar {
+  background: rgba(10,10,15,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--ap-border);
+  padding: .75rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.ap-navbar .navbar-brand {
+  font-family: var(--ap-font-game);
+  font-size: .72rem;
+  color: var(--ap-accent) !important;
+  letter-spacing: .06em;
+  text-shadow: 0 0 12px var(--ap-accent);
+  text-decoration: none;
+}
+
+.ap-navbar .nav-link {
+  color: var(--ap-muted) !important;
+  font-size: .85rem;
+  font-weight: 500;
+  padding: .35rem .75rem !important;
+  border-radius: 6px;
+  transition: color .2s, background .2s;
+}
+.ap-navbar .nav-link:hover,
+.ap-navbar .nav-link.active {
+  color: var(--ap-text) !important;
+  background: rgba(255,255,255,.06);
+}
+
+.ap-navbar .nav-link.highlight {
+  color: var(--ap-accent) !important;
+  border: 1px solid rgba(0,229,255,.25);
+}
+.ap-navbar .nav-link.highlight:hover {
+  background: rgba(0,229,255,.1);
+}
+
+.navbar-toggler {
+  border-color: var(--ap-border);
+}
+.navbar-toggler-icon {
+  filter: invert(1);
+}
+
+.ap-main {
+  min-height: calc(100vh - 130px);
+}
+
+.ap-footer {
+  border-top: 1px solid var(--ap-border);
+  padding: 1.5rem 0;
+  margin-top: 4rem;
+}
+.ap-footer p {
+  color: var(--ap-muted);
+  font-size: .82rem;
+  margin: 0;
+}
+.ap-footer a {
+  color: var(--ap-muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+.ap-footer a:hover { color: var(--ap-accent); }
+
+.alert { border-radius: 8px; border: 1px solid var(--ap-border); }
