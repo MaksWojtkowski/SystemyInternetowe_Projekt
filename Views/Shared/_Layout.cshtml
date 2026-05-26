@@ -1,46 +1,97 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - ArcadeProject</title>
+    <title>@ViewData["Title"] - ArcadePortal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/ArcadeProject.styles.css" asp-append-version="true"/>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ArcadeProject</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+
+<nav class="ap-navbar navbar navbar-expand-md">
+    <div class="container">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+            ARCADE<span style="color:var(--ap-accent2)">PORTAL</span>
+        </a>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto gap-1">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Game" asp-action="Index">Gry</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Leaderboard" asp-action="Index">Ranking</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Forum" asp-action="Index">Forum</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav gap-1">
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link" asp-controller="Profile" asp-action="Index">
+                            👾 @User.Identity.Name
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link" asp-controller="Account" asp-action="Logout">Wyloguj</a>
                     </li>
-                </ul>
-            </div>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Login">Zaloguj</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link highlight" asp-controller="Account" asp-action="Register">Zarejestruj się</a>
+                    </li>
+                }
+            </ul>
         </div>
-    </nav>
-</header>
-<div class="container">
-    <main role="main" class="pb-3">
+    </div>
+</nav>
+
+<div class="ap-main">
+    <div class="container py-4">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
         @RenderBody()
-    </main>
+    </div>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2026 - ArcadeProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<footer class="ap-footer">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <p>&copy; 2026 ArcadePortal — projekt zaliczeniowy</p>
+        <p>
+            <a asp-controller="Home" asp-action="Privacy">Polityka prywatności</a>
+        </p>
     </div>
 </footer>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
