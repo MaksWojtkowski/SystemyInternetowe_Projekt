@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="~/css/homeIndex.css" asp-append-version="true"/>
 }
 
-<!-- ── HERO ── -->
 <section class="hero">
     <div class="hero-label">@Loc["HeroLabel"]</div>
     <h1>@Loc["HeroTitle"]<br><span>@Loc["HeroTitleAccent"]</span></h1>
@@ -34,7 +33,6 @@
     </div>
 </section>
 
-<!-- ── STATYSTYKI ── -->
 <div class="stats-bar">
     <div class="stat-item">
         <span class="stat-value">@Model.TotalGames</span>
@@ -54,7 +52,6 @@
     </div>
 </div>
 
-<!-- ── GIRY ── -->
 <div class="section-title">@Loc["SectionGames"]</div>
 
 @if (Model.Games.Any())
@@ -115,7 +112,6 @@ else
     </div>
 }
 
-<!-- ── FORUM TEASER ── -->
 <div class="forum-teaser">
     <div class="forum-teaser-text">
         <h3>@Loc["ForumTitle"]</h3>

@@ -1,0 +1,167 @@
+﻿@model ArcadeProject.DTOs.LeaderboardDTO.LeaderboardIndexDto
+@{ ViewData["Title"] = "Ranking globalny"; }
+
+<link rel="stylesheet" href="~/css/leaderboard.css" asp-append-version="true"/>
+
+<div class="lb-header">
+    <h1 class="lb-title">RANKING GLOBALNY</h1>
+    <p class="lb-sub">Suma najlepszych wyników ze wszystkich gier.</p>
+</div>
+<div class="lb-stats">
+    <div class="lb-stat-card">
+        <span class="lb-stat-value">@Model.TotalPlayers</span>
+        <div class="lb-stat-label">Graczy w rankingu</div>
+    </div>
+    <div class="lb-stat-card">
+        <span class="lb-stat-value">@Model.TotalSessions.ToString("N0")</span>
+        <div class="lb-stat-label">Rozegranych partii</div>
+    </div>
+    <div class="lb-stat-card">
+        <span class="lb-stat-value">@Model.HighestScore.ToString("N0")</span>
+        <div class="lb-stat-label">Rekord wszech czasów (@Model.HighestScoreGame)</div>
+    </div>
+</div>
+@if (Model.Podium.Any())
+{
+    <div class="podium-section">
+        <div class="section-label">PODIUM</div>
+        <div class="podium">
+            @{
+                var ordered = new[] {
+                    Model.Podium.ElementAtOrDefault(1),
+                    Model.Podium.ElementAtOrDefault(0),
+                    Model.Podium.ElementAtOrDefault(2)
+                };
+                string[] medals  = ["🥈", "🥇", "🥉"];
+                string[] classes = ["second", "first", "third"];
+            }
+            @for (int i = 0; i < 3; i++)
+            {
+                var entry = ordered[i];
+                if (entry is null)
+                {
+                    <div class="podium-card @classes[i]" style="opacity:.3;min-height:160px"></div>
+                    continue;
+                }
+                <div class="podium-card @classes[i]">
+                    <span class="podium-medal">@medals[i]</span>
+                    <div class="podium-rank">#@entry.Rank</div>
+                    <div class="podium-username">@entry.Username</div>
+                    <span class="podium-score">@entry.TotalScore.ToString("N0")</span>
+                    <div class="podium-detail">@entry.TotalGames rozgrywek</div>
+                    <div class="podium-best-game">najlepsza: @entry.BestGameTitle</div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@if (Model.Table.Any())
+{
+    <div class="lb-table-section">
+        <div class="section-label">POZOSTAŁE MIEJSCA</div>
+        <table class="lb-table">
+            <thead>
+                <tr>
+                    <th style="width:44px">#</th>
+                    <th>GRACZ</th>
+                    <th class="right">ŁĄCZNY WYNIK</th>
+                    <th class="right">PARTII</th>
+                    <th>NAJLEPSZA GRA</th>
+                    <th class="right">REKORD</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var entry in Model.Table)
+                {
+                    <tr>
+                        <td><span class="rank-num">@entry.Rank</span></td>
+                        <td class="username">@entry.Username</td>
+                        <td class="score-col right">@entry.TotalScore.ToString("N0")</td>
+                        <td class="right">@entry.TotalGames</td>
+                        <td>@entry.BestGameTitle</td>
+                        <td class="right" style="font-size:.75rem;color:var(--ap-muted)">
+                            @entry.BestGameScore.ToString("N0")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else if (!Model.Podium.Any())
+{
+    <div class="empty-lb-global">
+        Nikt jeszcze nie rozegrał żadnej partii. Bądź pierwszy! 🏆
+    </div>
+}
+
+@if (Model.ByGame.Any())
+{
+    <div class="game-tabs-section">
+        <div class="section-label">TOP 10 PER GRA</div>
+        <div class="game-tabs">
+            @for (int i = 0; i < Model.ByGame.Count; i++)
+            {
+                var game = Model.ByGame[i];
+                <button class="game-tab @(i == 0 ? "active" : "")"
+                        onclick="switchTab('@game.Slug')">
+                    @game.Title.ToUpper()
+                </button>
+            }
+        </div>
+        @for (int i = 0; i < Model.ByGame.Count; i++)
+        {
+            var game = Model.ByGame[i];
+            <div class="game-tab-panel @(i == 0 ? "active" : "")"
+                 id="tab-@game.Slug">
+                <div class="game-lb-wrap">
+                    @if (game.Entries.Any())
+                    {
+                        <table class="game-lb-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:40px">#</th>
+                                    <th>GRACZ</th>
+                                    <th class="right">WYNIK</th>
+                                    <th class="right">DATA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var entry in game.Entries)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="rank-badge-lb @(entry.Rank switch { 1=>"gold", 2=>"silver", 3=>"bronze", _=>""})">
+                                                @entry.Rank
+                                            </span>
+                                        </td>
+                                        <td class="username">@entry.Username</td>
+                                        <td class="score-col right">@entry.Score.ToString("N0")</td>
+                                        <td class="right" style="font-size:.72rem;color:var(--ap-muted)">
+                                            @entry.PlayedAt.ToString("dd.MM.yyyy")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="empty-game-lb">Brak wyników dla tej gry.</div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+<script>
+function switchTab(slug) {
+    document.querySelectorAll('.game-tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + slug).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+</script>
+}

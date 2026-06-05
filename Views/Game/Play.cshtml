@@ -11,8 +11,7 @@
 }
 
 <div class="game-page">
-
-    <!-- HEADER -->
+    
     <div class="game-header">
         <a class="game-header-back" asp-controller="Game" asp-action="Index">&lt; WRÓĆ DO LISTY GIER</a>
         <h1>@Model.Title.ToUpper()</h1>
@@ -21,15 +20,12 @@
             <p>@Model.Description</p>
         }
     </div>
-
-    <!-- OBSZAR GRY -->
+    
     <div class="game-main">
         <div class="game-canvas-wrapper">
-
-            <!-- Warstwa 1: canvas -->
+            
             <canvas id="gameCanvas"></canvas>
-
-            <!-- Warstwa 2: overlay menu (start / game over) -->
+            
             <div id="gameMenu" class="game-menu">
                 <h2 class="menu-title">@Model.Title.ToUpper()</h2>
                 <p class="menu-sub" id="menuSub">Naciśnij START lub spację żeby zacząć</p>
@@ -37,8 +33,7 @@
             </div>
 
         </div>
-
-        <!-- Pasek statusu -->
+        
         <div class="game-statusbar">
             <div class="game-stat">
                 <span class="game-stat-value" id="statScore">0</span>
@@ -55,8 +50,7 @@
             <span class="save-status" id="saveStatus"></span>
         </div>
     </div>
-
-    <!-- SIDEBAR -->
+    
     <aside class="game-sidebar">
 
         @if (Model.IsLoggedIn)

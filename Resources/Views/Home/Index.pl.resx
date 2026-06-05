@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true"/>
+    </xsd:schema>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+  
+    <data name="HeroLabel" xml:space="preserve">
+    <value>// Witaj na portalu</value>
+  </data>
+    <data name="HeroTitle" xml:space="preserve">
+    <value>Graj. Rywalizuj.</value>
+  </data>
+    <data name="HeroTitleAccent" xml:space="preserve">
+    <value>Zostaw swój ślad.</value>
+  </data>
+    <data name="HeroDesc" xml:space="preserve">
+    <value>Klasyczne gry przeglądarkowe z globalnym rankingiem, historią rozgrywek i systemem odznak.</value>
+  </data>
+    <data name="HeroBtnGames" xml:space="preserve">
+    <value>Przeglądaj gry</value>
+  </data>
+    <data name="HeroBtnRegister" xml:space="preserve">
+    <value>Zarejestruj się</value>
+  </data>
+    <data name="HeroBtnRanking" xml:space="preserve">
+    <value>Ranking globalny</value>
+  </data>
+    <data name="StatsGames" xml:space="preserve">
+    <value>Gier dostępnych</value>
+  </data>
+    <data name="StatsSessions" xml:space="preserve">
+    <value>Rozegranych partii</value>
+  </data>
+    <data name="StatsUsers" xml:space="preserve">
+    <value>Zarejestrowanych graczy</value>
+  </data>
+    <data name="StatsThreads" xml:space="preserve">
+    <value>Wątków na forum</value>
+  </data>
+    <data name="SectionGames" xml:space="preserve">
+    <value>POPULARNE GRY</value>
+  </data>
+    <data name="AllGamesLink" xml:space="preserve">
+    <value>WSZYSTKIE GRY →</value>
+  </data>
+    <data name="GamesEmpty" xml:space="preserve">
+    <value>Brak gier — administrator wkrótce doda pierwsze tytuły.</value>
+  </data>
+    <data name="GamePlayed" xml:space="preserve">
+    <value>Grano:</value>
+  </data>
+    <data name="GamePlayBtn" xml:space="preserve">
+    <value>GRAJ ></value>
+  </data>
+    <data name="ForumTitle" xml:space="preserve">
+    <value>FORUM GRACZY</value>
+  </data>
+    <data name="ForumDesc" xml:space="preserve">
+    <value>Podziel się strategią, zgłoś buga albo po prostu pogadaj o grach z innymi graczami.</value>
+  </data>
+    <data name="ForumBtn" xml:space="preserve">
+    <value>Przejdź do forum</value>
+  </data>
+    <data name="Title" xml:space="preserve">
+    <value>Strona główna</value>
+  </data>
+</root>

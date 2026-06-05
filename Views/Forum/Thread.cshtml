@@ -7,7 +7,6 @@
 
 <link rel="stylesheet" href="~/css/forum.css" asp-append-version="true"/>
 
-<!-- ── HEADER WĄTKU ── -->
 <div class="thread-header">
     <div class="thread-header-top">
         <a class="back-link"
@@ -26,7 +25,6 @@
     </p>
 </div>
 
-<!-- ── POSTY ── -->
 <div class="posts-list">
     @foreach (var post in Model.Posts)
     {
@@ -63,7 +61,6 @@
     }
 </div>
 
-<!-- ── FORMULARZ ODPOWIEDZI ── -->
 @if (User.Identity?.IsAuthenticated == true)
 {
     <div class="reply-box">

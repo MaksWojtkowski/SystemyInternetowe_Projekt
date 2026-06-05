@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using ArcadeProject.Data;
 using ArcadeProject.DTOs;
+using ArcadeProject.Services;
 
 namespace ArcadeProject.Controllers;
 
@@ -11,14 +12,16 @@ public class GameController : Controller
     private readonly AppDbContext _db;
     private readonly IMemoryCache _cache;
     private readonly ILogger<GameController> _logger;
+    private readonly AchievementService _achievements;
     
     private static readonly HashSet<string> KnownGames = ["snake", "tetris", "flappy"];
 
-    public GameController(AppDbContext db, IMemoryCache cache, ILogger<GameController> logger)
+    public GameController(AppDbContext db, IMemoryCache cache, ILogger<GameController> logger, AchievementService achievements)
     {
         _db     = db;
         _cache  = cache;
         _logger = logger;
+        _achievements = achievements;
     }
     
     public async Task<IActionResult> Index()
@@ -147,12 +150,24 @@ public class GameController : Controller
         _db.GameSessions.Add(session);
         await _db.SaveChangesAsync();
         
+        var granted = await _achievements.CheckAndGrantAsync(
+            userId, game.Id, request.Score, request.DurationSeconds);
+        
         _cache.Remove($"leaderboard:{request.GameSlug}");
-
         _logger.LogInformation("Score saved: {User} → {Game} = {Score}",
             User.Identity!.Name, request.GameSlug, request.Score);
 
-        return Ok(new { message = "Wynik zapisany!", score = request.Score });
+        return Ok(new
+        {
+            message      = "Wynik zapisany!",
+            score        = request.Score,
+            newAchievements = granted.Select(a => new
+            {
+                name        = a.Name,
+                description = a.Description,
+                icon        = a.IconUrl
+            })
+        });
     }
 }
 
