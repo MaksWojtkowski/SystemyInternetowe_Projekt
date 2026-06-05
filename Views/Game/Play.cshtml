@@ -1,0 +1,159 @@
+﻿@model ArcadeProject.DTOs.GamePlayDto
+@{
+    ViewData["Title"] = Model.Title;
+    var jsGame  = $"~/js/games/{Model.Slug}.js";
+    var cssGame = $"~/css/games/{Model.Slug}.css";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/gamePlay.css"  asp-append-version="true"/>
+    <link rel="stylesheet" href="@cssGame"            asp-append-version="true"/>
+}
+
+<div class="game-page">
+
+    <!-- HEADER -->
+    <div class="game-header">
+        <a class="game-header-back" asp-controller="Game" asp-action="Index">&lt; WRÓĆ DO LISTY GIER</a>
+        <h1>@Model.Title.ToUpper()</h1>
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <p>@Model.Description</p>
+        }
+    </div>
+
+    <!-- OBSZAR GRY -->
+    <div class="game-main">
+        <div class="game-canvas-wrapper">
+
+            <!-- Warstwa 1: canvas -->
+            <canvas id="gameCanvas"></canvas>
+
+            <!-- Warstwa 2: overlay menu (start / game over) -->
+            <div id="gameMenu" class="game-menu">
+                <h2 class="menu-title">@Model.Title.ToUpper()</h2>
+                <p class="menu-sub" id="menuSub">Naciśnij START lub spację żeby zacząć</p>
+                <button class="btn-menu-start" id="btnStart">START</button>
+            </div>
+
+        </div>
+
+        <!-- Pasek statusu -->
+        <div class="game-statusbar">
+            <div class="game-stat">
+                <span class="game-stat-value" id="statScore">0</span>
+                <span class="game-stat-label">Wynik</span>
+            </div>
+            <div class="game-stat">
+                <span class="game-stat-value" id="statBest">@(Model.PersonalBest?.ToString() ?? "-")</span>
+                <span class="game-stat-label">Twój rekord</span>
+            </div>
+            <div class="game-stat">
+                <span class="game-stat-value" id="statTime">0s</span>
+                <span class="game-stat-label">Czas</span>
+            </div>
+            <span class="save-status" id="saveStatus"></span>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="game-sidebar">
+
+        @if (Model.IsLoggedIn)
+        {
+            <div class="sidebar-card">
+                <div class="sidebar-card-header">TWÓJ REKORD</div>
+                <div class="personal-best">
+                    <span class="personal-best-value">
+                        @(Model.PersonalBest.HasValue ? Model.PersonalBest.Value.ToString("N0") : "—")
+                    </span>
+                    <div class="personal-best-label">
+                        @(Model.PersonalBest.HasValue ? "pkt" : "Jeszcze nie grałeś")
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="sidebar-card">
+                <div class="sidebar-card-body">
+                    <div class="login-nudge">
+                        <a asp-controller="Account" asp-action="Login">Zaloguj się</a>,
+                        żeby zapisywać wyniki i pojawiać się w rankingu.
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="sidebar-card">
+            <div class="sidebar-card-header">TOP 10 — @Model.Title.ToUpper()</div>
+            <div class="sidebar-card-body" style="padding:.5rem 1rem">
+                @if (Model.TopScores.Any())
+                {
+                    <table class="leaderboard-table">
+                        @foreach (var entry in Model.TopScores)
+                        {
+                            <tr>
+                                <td style="width:28px">
+                                    <span class="rank-badge @(entry.Rank switch { 1=>"gold", 2=>"silver", 3=>"bronze", _=>""})">
+                                        @entry.Rank
+                                    </span>
+                                </td>
+                                <td class="lb-user">@entry.Username</td>
+                                <td class="lb-score">@entry.Score.ToString("N0")</td>
+                            </tr>
+                        }
+                    </table>
+                }
+                else
+                {
+                    <div class="empty-lb">Brak wyników — bądź pierwszy! 🏆</div>
+                }
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <div class="sidebar-card-header">STEROWANIE</div>
+            <div class="sidebar-card-body">
+                <ul class="controls-list">
+                    @if (Model.Slug == "snake")
+                    {
+                        <li><span class="key">↑ ↓ ← →</span> Kierunek</li>
+                        <li><span class="key">W A S D</span> Kierunek</li>
+                    }
+                    else if (Model.Slug == "tetris")
+                    {
+                        <li><span class="key">← →</span> Przesuń</li>
+                        <li><span class="key">↑</span> Obróć</li>
+                        <li><span class="key">↓</span> Szybciej</li>
+                        <li><span class="key">SPACE</span> Upuść</li>
+                    }
+                    else if (Model.Slug == "flappy")
+                    {
+                        <li><span class="key">SPACE</span> Skok</li>
+                        <li><span class="key">Klik</span> Skok</li>
+                    }
+                    else
+                    {
+                        <li>Brak zdefiniowanego sterowania.</li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+    </aside>
+</div>
+
+@section Scripts {
+    <script>
+        window.ARCADE = {
+            slug:         "@Model.Slug",
+            gameId:       @Model.GameId,
+            isLoggedIn:   @Model.IsLoggedIn.ToString().ToLower(),
+            personalBest: @(Model.PersonalBest.HasValue ? Model.PersonalBest.Value.ToString() : "null")
+        };
+    </script>
+    @Html.AntiForgeryToken()
+    <script src="~/js/gamePlay.js" asp-append-version="true"></script>
+    <script src="@jsGame"          asp-append-version="true"></script>
+}

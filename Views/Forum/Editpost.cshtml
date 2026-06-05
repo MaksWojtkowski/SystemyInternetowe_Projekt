@@ -1,0 +1,44 @@
+﻿@model ArcadeProject.DTOs.EditPostDto
+@{ ViewData["Title"] = "Edytuj post"; }
+
+<link rel="stylesheet" href="~/css/forum.css" asp-append-version="true"/>
+
+<div class="forum-form-page">
+    <h1 class="forum-form-title">EDYTUJ POST</h1>
+
+    <div class="forum-form-card">
+        <form asp-action="EditPost" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="PostId"/>
+
+            <div class="forum-form-field">
+                <label class="forum-form-label" asp-for="Body">TREŚĆ</label>
+                <textarea class="forum-textarea" asp-for="Body"
+                          maxlength="5000"
+                          oninput="updateCount(this)"
+                          style="min-height:200px"></textarea>
+                <div style="display:flex;justify-content:space-between;margin-top:.3rem">
+                    <span class="field-error" asp-validation-for="Body"></span>
+                    <span class="char-count"><span id="bodyCount">0</span> / 5000</span>
+                </div>
+            </div>
+
+            <div class="forum-form-actions">
+                <button type="submit" class="btn-forum-submit">ZAPISZ ZMIANY</button>
+                <a class="btn-forum-cancel" onclick="history.back()">ANULUJ</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    function updateCount(el) {
+        document.getElementById('bodyCount').textContent = el.value.length;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const ta = document.querySelector('[name="Body"]');
+        if (ta) document.getElementById('bodyCount').textContent = ta.value.length;
+    });
+</script>
+}

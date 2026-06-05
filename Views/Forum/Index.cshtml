@@ -1,0 +1,73 @@
+﻿@model ArcadeProject.DTOs.ForumIndexDto
+@{ ViewData["Title"] = "Forum"; }
+
+<link rel="stylesheet" href="~/css/forum.css" asp-append-version="true"/>
+
+<div class="forum-header">
+    <div>
+        <h1 class="forum-title">
+            @if (Model.FilterGameTitle is not null)
+            { <span>FORUM — @Model.FilterGameTitle.ToUpper()</span> }
+            else
+            { <span>FORUM GRACZY</span> }
+        </h1>
+        <p class="forum-sub">Dyskusje o grach, strategie, bugi i wszystko inne.</p>
+    </div>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <a class="btn-new-thread"
+           asp-action="Create"
+           asp-route-gameId="@Model.FilterGameId">
+            + NOWY WĄTEK
+        </a>
+    }
+</div>
+
+<!-- ── FILTRY ── -->
+<div class="forum-filters">
+    <a class="filter-chip @(Model.FilterGameId is null ? "active" : "")"
+       asp-action="Index">Wszystkie</a>
+    @foreach (var game in Model.Games)
+    {
+        <a class="filter-chip @(Model.FilterGameId == game.Id ? "active" : "")"
+           asp-action="Index" asp-route-gameId="@game.Id">
+            @game.Title
+        </a>
+    }
+</div>
+
+<!-- ── LISTA WĄTKÓW ── -->
+@if (Model.Threads.Any())
+{
+    <div class="thread-list">
+        @foreach (var thread in Model.Threads)
+        {
+            <a class="thread-item @(thread.IsPinned ? "pinned" : "")"
+               asp-action="Thread" asp-route-id="@thread.Id">
+                <div class="thread-item-title">
+                    @if (thread.IsPinned) { <span class="pin-icon">📌</span> }
+                    @thread.Title
+                    @if (thread.GameTitle is not null)
+                    {
+                        <span class="game-badge">@thread.GameTitle.ToUpper()</span>
+                    }
+                </div>
+                <div class="thread-item-meta">
+                    przez <span>@thread.AuthorName</span>
+                    · @thread.CreatedAt.ToString("dd.MM.yyyy")
+                    · ostatnia aktywność @thread.LastPostAt.ToString("dd.MM.yyyy HH:mm")
+                </div>
+                <div class="thread-item-stats">
+                    <div class="stat-posts">postów: <span>@thread.PostCount</span></div>
+                </div>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <div class="empty-forum">
+        <div class="icon">💬</div>
+        <p>Brak wątków — bądź pierwszy!</p>
+    </div>
+}

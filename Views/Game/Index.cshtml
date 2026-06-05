@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ArcadeProject.DTOs.GameDto>
+@{
+    ViewData["Title"] = "Gry";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/gameIndex.css" asp-append-version="true" />
+}
+
+<div class="games-header">
+    <h1>WSZYSTKIE GRY</h1>
+    <p>Wybierz grę i zostaw swój ślad w rankingu.</p>
+</div>
+
+@if (Model.Any())
+{
+    <div class="game-grid">
+        @foreach (var game in Model)
+        {
+            <a class="game-card" asp-controller="Game" asp-action="Play" asp-route-slug="@game.Slug">
+                @if (!string.IsNullOrEmpty(game.ThumbnailUrl))
+                {
+                    <img class="game-thumb" src="@game.ThumbnailUrl" alt="@game.Title"/>
+                }
+                else
+                {
+                    <div class="game-thumb-placeholder">
+                        @(game.Slug switch {
+                            "snake"  => "🐍",
+                            "tetris" => "🟦",
+                            "flappy" => "🐦",
+                            _        => "🕹️"
+                        })
+                    </div>
+                }
+                <div class="game-body">
+                    <div class="game-title">@game.Title</div>
+                    @if (!game.IsActive)
+                    {
+                        <div class="game-adminview">
+                            ⚠ NIEAKTYWNA
+                        </div>
+                    }
+                    <div class="game-desc">@game.Description</div>
+                    <div class="game-meta">
+                        <div class="game-plays">Grano: <span>@game.TotalSessions</span>×</div>
+                        <div class="play-btn">GRAJ &gt;</div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <div style="text-align:center; padding:4rem; color:var(--ap-muted)">
+        <div style="font-size:3rem; margin-bottom:1rem">🕹️</div>
+        <p>Brak dostępnych gier.</p>
+    </div>
+}

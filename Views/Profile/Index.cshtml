@@ -1,0 +1,155 @@
+﻿@model ArcadeProject.DTOs.ProfileDto
+@{ ViewData["Title"] = "Profil"; }
+
+<link rel="stylesheet" href="~/css/profile.css" asp-append-version="true"/>
+
+<div class="profile-grid">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="profile-sidebar">
+
+        <!-- Avatar + info -->
+        <div class="profile-card">
+            <div class="profile-avatar-wrap">
+                @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+                {
+                    <img class="profile-avatar" src="@Model.AvatarUrl" alt="@Model.Username"/>
+                }
+                else
+                {
+                    <div class="profile-avatar-placeholder">
+                        @Model.Username[0].ToString().ToUpper()
+                    </div>
+                }
+                <div class="profile-username">@Model.Username</div>
+                <span class="profile-role-badge @(Model.Role == "Admin" ? "role-admin" : "role-user")">
+                    @Model.Role.ToUpper()
+                </span>
+                <div class="profile-joined">od @Model.CreatedAt.ToString("dd.MM.yyyy")</div>
+            </div>
+        </div>
+
+        <!-- Statystyki -->
+        <div class="profile-card">
+            <div class="profile-card-header">STATYSTYKI</div>
+            <div class="profile-card-body">
+                <div class="profile-stats">
+                    <div class="profile-stat-row">
+                        <span class="label">Sesje</span>
+                        <span class="value">@Model.TotalSessions</span>
+                    </div>
+                    <div class="profile-stat-row">
+                        <span class="label">Łączny wynik</span>
+                        <span class="value">@Model.TotalScore.ToString("N0")</span>
+                    </div>
+                    <div class="profile-stat-row">
+                        <span class="label">Grane gry</span>
+                        <span class="value">@Model.TotalGames</span>
+                    </div>
+                    <div class="profile-stat-row">
+                        <span class="label">Odznaki</span>
+                        <span class="value">@Model.Achievements.Count</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nawigacja -->
+        <div class="profile-card">
+            <div class="profile-card-body" style="padding:.5rem">
+                <nav class="profile-nav">
+                    <a class="profile-nav-link" asp-action="Edit">⚙️ Edytuj profil</a>
+                    <a class="profile-nav-link" asp-action="ChangePassword">🔑 Zmień hasło</a>
+                    @if (Model.Role == "Admin")
+                    {
+                        <a class="profile-nav-link" asp-controller="Admin" asp-action="Index"
+                           style="color:var(--ap-accent2)">
+                            🛡️ Panel admina
+                        </a>
+                    }
+                </nav>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- ── GŁÓWNA TREŚĆ ── -->
+    <div class="profile-main">
+
+        <!-- Historia rozgrywek -->
+        <div class="content-card">
+            <div class="content-card-header">
+                OSTATNIE ROZGRYWKI
+                <span style="font-family:var(--ap-font-ui);font-size:.75rem;color:var(--ap-muted)">
+                    ostatnie 20
+                </span>
+            </div>
+            <div class="content-card-body" style="padding:0">
+                @if (Model.RecentSessions.Any())
+                {
+                    <table class="session-table">
+                        <thead>
+                            <tr>
+                                <th>GRA</th>
+                                <th class="right">WYNIK</th>
+                                <th class="right">CZAS</th>
+                                <th class="right">DATA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var s in Model.RecentSessions)
+                            {
+                                <tr>
+                                    <td class="game-name">
+                                        <a asp-controller="Game" asp-action="Play"
+                                           asp-route-slug="@s.GameSlug"
+                                           style="color:inherit;text-decoration:none">
+                                            @s.GameTitle
+                                        </a>
+                                    </td>
+                                    <td class="score-val right">@s.Score.ToString("N0")</td>
+                                    <td class="right">@s.Duration s</td>
+                                    <td class="right">@s.PlayedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="session-empty">Brak rozgrywek — zagraj w coś! 🎮</div>
+                }
+            </div>
+        </div>
+
+        <!-- Odznaki -->
+        <div class="content-card">
+            <div class="content-card-header">ODZNAKI</div>
+            <div class="content-card-body">
+                @if (Model.Achievements.Any())
+                {
+                    <div class="achievements-grid">
+                        @foreach (var a in Model.Achievements)
+                        {
+                            <div class="achievement-item">
+                                <div class="achievement-icon">@(a.IconUrl ?? "🏅")</div>
+                                <div>
+                                    <div class="achievement-name">@a.Name</div>
+                                    <div class="achievement-desc">@a.Description</div>
+                                    <div class="achievement-date">
+                                        @a.UnlockedAt.ToString("dd.MM.yyyy")
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="achievements-empty">Brak odznak — graj więcej żeby je zdobyć! 🏆</div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>

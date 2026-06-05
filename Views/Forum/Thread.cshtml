@@ -1,0 +1,101 @@
+﻿@model ArcadeProject.DTOs.ThreadDetailDto
+@{ ViewData["Title"] = Model.Title; }
+@{
+    var currentUserId = (await UserManager.GetUserAsync(User))?.Id ?? "";
+}
+@inject Microsoft.AspNetCore.Identity.UserManager<ArcadeProject.Models.User> UserManager
+
+<link rel="stylesheet" href="~/css/forum.css" asp-append-version="true"/>
+
+<!-- ── HEADER WĄTKU ── -->
+<div class="thread-header">
+    <div class="thread-header-top">
+        <a class="back-link"
+           asp-action="Index"
+           asp-route-gameId="@Model.GameId">
+            &lt; WRÓĆ DO FORUM
+        </a>
+        @if (Model.GameTitle is not null)
+        {
+            <span class="game-badge">@Model.GameTitle.ToUpper()</span>
+        }
+    </div>
+    <h1 class="thread-page-title">@Model.Title</h1>
+    <p class="thread-page-meta">
+        @Model.Posts.Count postów · utworzony @Model.CreatedAt.ToString("dd.MM.yyyy")
+    </p>
+</div>
+
+<!-- ── POSTY ── -->
+<div class="posts-list">
+    @foreach (var post in Model.Posts)
+    {
+        <div class="post-card" id="post-@post.Id">
+            <div class="post-header">
+                <span class="post-author">@post.AuthorName</span>
+                <span class="post-date">
+                    @post.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                    @if (post.IsEdited)
+                    {
+                        <span class="post-edited">(edytowano @post.UpdatedAt!.Value.ToString("dd.MM.yyyy HH:mm"))</span>
+                    }
+                </span>
+            </div>
+
+            <div class="post-body">@post.Body</div>
+
+            @if (User.Identity?.IsAuthenticated == true && post.AuthorId == currentUserId)
+            {
+                <div class="post-actions">
+                    <a class="btn-post-action edit"
+                       asp-action="EditPost" asp-route-id="@post.Id">
+                        EDYTUJ
+                    </a>
+                    <form asp-action="DeletePost" method="post" style="margin:0"
+                          onsubmit="return confirm('Na pewno usunąć ten post?')">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@post.Id"/>
+                        <button type="submit" class="btn-post-action delete">USUŃ</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- ── FORMULARZ ODPOWIEDZI ── -->
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <div class="reply-box">
+        <div class="reply-box-title">TWOJA ODPOWIEDŹ</div>
+        <form asp-action="AddPost" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="ThreadId" value="@Model.ThreadId"/>
+            <textarea class="forum-textarea"
+                      name="Body"
+                      id="replyBody"
+                      placeholder="Napisz coś..."
+                      maxlength="5000"
+                      oninput="updateCount(this)"></textarea>
+            <div class="reply-footer">
+                <span class="char-count"><span id="replyCount">0</span> / 5000</span>
+                <button type="submit" class="btn-reply">WYŚLIJ ODPOWIEDŹ</button>
+            </div>
+        </form>
+    </div>
+}
+else
+{
+    <div class="login-to-reply">
+        <a asp-controller="Account" asp-action="Login">Zaloguj się</a>
+        aby dodać odpowiedź.
+    </div>
+}
+
+@section Scripts {
+<script>
+function updateCount(el) {
+    document.getElementById('replyCount').textContent = el.value.length;
+}
+</script>
+}

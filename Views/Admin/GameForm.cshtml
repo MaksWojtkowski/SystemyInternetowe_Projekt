@@ -1,0 +1,76 @@
+﻿@model ArcadeProject.DTOs.UpsertGameDto
+@{ ViewData["Title"] = Model.Id is null ? "Nowa gra" : "Edytuj grę"; }
+
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true"/>
+
+<div style="max-width:600px;margin:2rem auto">
+    <h1 class="admin-form-title">
+        @(Model.Id is null ? "DODAJ NOWĄ GRĘ" : "EDYTUJ GRĘ")
+    </h1>
+
+    <div class="admin-form">
+        <form asp-action="GameForm" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id"/>
+
+            <div class="admin-field">
+                <label class="admin-label" asp-for="Title">TYTUŁ</label>
+                <input class="admin-input" asp-for="Title" placeholder="np. Snake"/>
+                <span class="field-error" asp-validation-for="Title"></span>
+            </div>
+
+            <div class="admin-field">
+                <label class="admin-label" asp-for="Slug">SLUG</label>
+                @if (Model.Id is not null)
+                {
+                    <input class="admin-input" asp-for="Slug" placeholder="np. snake" readonly/>
+                }
+                else
+                {
+                    <input class="admin-input" asp-for="Slug" placeholder="np. snake"/>
+                }
+                <span style="font-size:.72rem;color:var(--ap-muted)">
+                    Tylko małe litery i myślniki. Musi pasować do nazwy pliku JS/CSS gry.
+                    @if (Model.Id is not null)
+                    { <span style="color:#facc15"> Nie można zmieniać po utworzeniu.</span> }
+                </span>
+                <span class="field-error" asp-validation-for="Slug"></span>
+            </div>
+
+            <div class="admin-field">
+                <label class="admin-label" asp-for="Description">OPIS (opcjonalnie)</label>
+                <textarea class="admin-input" asp-for="Description"
+                          style="min-height:80px;resize:vertical"
+                          placeholder="Krótki opis gry..."></textarea>
+            </div>
+
+            <div class="admin-field">
+                <label class="admin-label" asp-for="ThumbnailUrl">URL MINIATURKI (opcjonalnie)</label>
+                <input class="admin-input" asp-for="ThumbnailUrl"
+                       type="url" placeholder="https://..."/>
+                <span class="field-error" asp-validation-for="ThumbnailUrl"></span>
+            </div>
+
+            <div class="admin-checkbox-row">
+                <input type="checkbox" asp-for="IsActive" id="isActive"/>
+                <label for="isActive">Gra aktywna (widoczna dla graczy)</label>
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="submit" class="btn-settings-save"
+                        style="font-family:var(--ap-font-game);font-size:.55rem;
+                               padding:.65rem 1.25rem;background:var(--ap-accent);
+                               color:#000;border:none;border-radius:6px;cursor:pointer">
+                    @(Model.Id is null ? "DODAJ GRĘ" : "ZAPISZ ZMIANY")
+                </button>
+                <a class="btn-settings-cancel" asp-action="Index"
+                   style="font-family:var(--ap-font-game);font-size:.55rem;
+                          padding:.65rem 1rem;background:transparent;
+                          color:var(--ap-muted);border:1px solid var(--ap-border);
+                          border-radius:6px;text-decoration:none;display:inline-block">
+                    ANULUJ
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

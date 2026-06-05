@@ -1,0 +1,147 @@
+﻿@model ArcadeProject.DTOs.AdminIndexDto
+@{ ViewData["Title"] = "Panel admina"; }
+
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true"/>
+
+<div class="admin-header">
+    <div>
+        <h1 class="admin-title">PANEL ADMINISTRATORA</h1>
+    </div>
+    <span class="admin-badge">ADMIN</span>
+</div>
+
+<!-- ── STATYSTYKI ── -->
+<div class="admin-stats">
+    <div class="admin-stat">
+        <span class="admin-stat-val">@Model.TotalUsers</span>
+        <div class="admin-stat-lbl">Użytkowników</div>
+    </div>
+    <div class="admin-stat">
+        <span class="admin-stat-val">@Model.TotalSessions</span>
+        <div class="admin-stat-lbl">Sesji</div>
+    </div>
+    <div class="admin-stat">
+        <span class="admin-stat-val">@Model.TotalThreads</span>
+        <div class="admin-stat-lbl">Wątków</div>
+    </div>
+    <div class="admin-stat">
+        <span class="admin-stat-val">@Model.TotalPosts</span>
+        <div class="admin-stat-lbl">Postów</div>
+    </div>
+</div>
+
+<!-- ── UŻYTKOWNICY ── -->
+<div class="admin-section">
+    <div class="admin-section-title">UŻYTKOWNICY</div>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>UŻYTKOWNIK</th>
+                <th>EMAIL</th>
+                <th>ROLA</th>
+                <th>SESJE</th>
+                <th>DOŁĄCZYŁ</th>
+                <th>STATUS</th>
+                <th>AKCJE</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in Model.Users)
+            {
+                <tr>
+                    <td class="primary">@u.Username</td>
+                    <td>@u.Email</td>
+                    <td>
+                        <span class="profile-role-badge @(u.Role == "Admin" ? "role-admin" : "role-user")"
+                              style="font-family:var(--ap-font-game);font-size:.4rem;padding:.15rem .5rem;border-radius:20px;border:1px solid">
+                            @u.Role.ToUpper()
+                        </span>
+                    </td>
+                    <td>@u.SessionCount</td>
+                    <td>@u.CreatedAt.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        @if (u.IsLocked)
+                        { <span class="locked-badge">ZABLOKOWANY</span> }
+                        else
+                        { <span style="font-size:.72rem;color:#34d399">aktywny</span> }
+                    </td>
+                    <td>
+                        <div class="admin-actions">
+                            @* Zmień rolę *@
+                            <form asp-action="SetRole" method="post" style="margin:0">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="userId" value="@u.Id"/>
+                                <input type="hidden" name="role"
+                                       value="@(u.Role == "Admin" ? "User" : "Admin")"/>
+                                <button type="submit" class="btn-admin primary">
+                                    @(u.Role == "Admin" ? "→ User" : "→ Admin")
+                                </button>
+                            </form>
+
+                            @* Blokuj / odblokuj *@
+                            <form asp-action="ToggleLock" method="post" style="margin:0"
+                                  onsubmit="return confirm('@(u.IsLocked ? "Odblokować" : "Zablokować") konto @u.Username?')">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="userId" value="@u.Id"/>
+                                <button type="submit"
+                                        class="btn-admin @(u.IsLocked ? "success" : "danger")">
+                                    @(u.IsLocked ? "Odblokuj" : "Zablokuj")
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- ── GIRY ── -->
+<div class="admin-section">
+    <div class="admin-section-title">
+        GIRY
+        <a class="btn-admin primary" asp-action="GameForm" style="margin-left:.5rem">+ NOWA GRA</a>
+    </div>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>TYTUŁ</th>
+                <th>SLUG</th>
+                <th>SESJE</th>
+                <th>STATUS</th>
+                <th>AKCJE</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in Model.Games)
+            {
+                <tr>
+                    <td class="primary">@g.Title</td>
+                    <td><code style="font-size:.75rem;color:var(--ap-muted)">@g.Slug</code></td>
+                    <td>@g.SessionCount</td>
+                    <td>
+                        @if (g.IsActive)
+                        { <span style="font-size:.72rem;color:#34d399">aktywna</span> }
+                        else
+                        { <span style="font-size:.72rem;color:#f87171">nieaktywna</span> }
+                    </td>
+                    <td>
+                        <div class="admin-actions">
+                            <a class="btn-admin primary"
+                               asp-action="GameForm" asp-route-id="@g.Id">Edytuj</a>
+
+                            <form asp-action="ToggleGame" method="post" style="margin:0">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@g.Id"/>
+                                <button type="submit"
+                                        class="btn-admin @(g.IsActive ? "warning" : "success")">
+                                    @(g.IsActive ? "Wyłącz" : "Włącz")
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

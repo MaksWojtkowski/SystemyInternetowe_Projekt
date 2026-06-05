@@ -1,0 +1,82 @@
+﻿@model ArcadeProject.DTOs.CreateThreadDto
+@{ ViewData["Title"] = "Nowy wątek"; }
+
+<link rel="stylesheet" href="~/css/forum.css" asp-append-version="true"/>
+
+<div class="forum-form-page">
+    <h1 class="forum-form-title">NOWY WĄTEK</h1>
+
+    <div class="forum-form-card">
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+        {
+            <div style="background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);
+                        border-radius:8px;padding:.75rem 1rem;font-size:.82rem;color:#f87171">
+                @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@err.ErrorMessage</div>
+                }
+            </div>
+        }
+
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- Przypisz do gry (opcjonalne) -->
+            <div class="forum-form-field">
+                <label class="forum-form-label">KATEGORIA (opcjonalnie)</label>
+                <select class="forum-form-select" asp-for="GameId">
+                    <option value="">— Ogólne forum —</option>
+                    @foreach (var game in (IEnumerable<ArcadeProject.DTOs.GameDto>)ViewBag.Games)
+                    {
+                        <option value="@game.Id"
+                                selected="@(Model.GameId == game.Id)">
+                            @game.Title
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <!-- Tytuł -->
+            <div class="forum-form-field">
+                <label class="forum-form-label" asp-for="Title">TYTUŁ WĄTKU</label>
+                <input class="forum-form-input" asp-for="Title"
+                       placeholder="O czym chcesz porozmawiać?" maxlength="200"/>
+                <span class="field-error" asp-validation-for="Title"></span>
+            </div>
+
+            <!-- Treść pierwszego posta -->
+            <div class="forum-form-field">
+                <label class="forum-form-label" asp-for="Body">TREŚĆ</label>
+                <textarea class="forum-textarea" asp-for="Body"
+                          placeholder="Napisz swój post..."
+                          maxlength="5000"
+                          oninput="updateCount(this)"
+                          style="min-height:180px"></textarea>
+                <div style="display:flex;justify-content:space-between;margin-top:.3rem">
+                    <span class="field-error" asp-validation-for="Body"></span>
+                    <span class="char-count"><span id="bodyCount">0</span> / 5000</span>
+                </div>
+            </div>
+
+            <div class="forum-form-actions">
+                <button type="submit" class="btn-forum-submit">OPUBLIKUJ WĄTEK</button>
+                <a class="btn-forum-cancel" asp-action="Index"
+                   asp-route-gameId="@Model.GameId">ANULUJ</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function updateCount(el) {
+        document.getElementById('bodyCount').textContent = el.value.length;
+    }
+    // Wypełnij licznik jeśli formularz wraca z błędem walidacji
+    document.addEventListener('DOMContentLoaded', () => {
+        const ta = document.querySelector('[name="Body"]');
+        if (ta) document.getElementById('bodyCount').textContent = ta.value.length;
+    });
+</script>
+}

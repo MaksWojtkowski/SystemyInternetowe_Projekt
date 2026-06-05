@@ -1,21 +1,25 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Loc
+
+<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - ArcadePortal</title>
+    <title>@ViewData["Title"]@Loc["Title"]</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
 
 <nav class="ap-navbar navbar navbar-expand-md">
     <div class="container">
         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-            ARCADE<span style="color:var(--ap-accent2)">PORTAL</span>
+            @Loc["SiteNameArcade"]<span style="color:var(--ap-accent2)">@Loc["SiteNamePortal"]</span>
         </a>
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse" data-bs-target="#mainNav"
@@ -25,19 +29,35 @@
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav me-auto gap-1">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">Strona główna</a>
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">@Loc["NavHome"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Game" asp-action="Index">Gry</a>
+                    <a class="nav-link" asp-controller="Game" asp-action="Index">@Loc["NavGames"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Leaderboard" asp-action="Index">Ranking</a>
+                    <a class="nav-link" asp-controller="Leaderboard" asp-action="Index">@Loc["NavRanking"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Forum" asp-action="Index">Forum</a>
+                    <a class="nav-link" asp-controller="Forum" asp-action="Index">@Loc["NavForum"]</a>
                 </li>
             </ul>
             <ul class="navbar-nav gap-1">
+                @using Microsoft.AspNetCore.Localization
+                @{
+                    var culture = Context.Features.Get<IRequestCultureFeature>()
+                        ?.RequestCulture.Culture.TwoLetterISOLanguageName ?? "pl";
+                }
+
+                <li class="nav-item">
+                    <form asp-controller="Culture" asp-action="Set" method="post" style="margin:0">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="culture" value="@(culture == "pl" ? "en" : "pl")"/>
+                        <input type="hidden" name="returnUrl" value="@Context.Request.Path"/>
+                        <button type="submit" class="nav-link" style="background:none;border:none;cursor:pointer">
+                            @(culture == "pl" ? "🇵🇱 PL" : "🇬🇧 EN")
+                        </button>
+                    </form>
+                </li>
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item">
@@ -46,16 +66,21 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Account" asp-action="Logout">Wyloguj</a>
+                        <form asp-controller="Account" asp-action="Logout" method="post" style="margin:0">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="nav-link" style="background:none;border:none;cursor:pointer">
+                                @Loc["NavLogout"]
+                            </button>
+                        </form>
                     </li>
                 }
                 else
                 {
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Account" asp-action="Login">Zaloguj</a>
+                        <a class="nav-link" asp-controller="Account" asp-action="Login">@Loc["NavLogin"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link highlight" asp-controller="Account" asp-action="Register">Zarejestruj się</a>
+                        <a class="nav-link highlight" asp-controller="Account" asp-action="Register">@Loc["NavRegister"]</a>
                     </li>
                 }
             </ul>
@@ -85,9 +110,9 @@
 
 <footer class="ap-footer">
     <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <p>&copy; 2026 ArcadePortal — projekt zaliczeniowy</p>
+        <p>@Loc["FooterDesc"]</p>
         <p>
-            <a asp-controller="Home" asp-action="Privacy">Polityka prywatności</a>
+            <a asp-controller="Home" asp-action="Privacy">@Loc["FooterPolicy"]</a>
         </p>
     </div>
 </footer>
@@ -96,5 +121,6 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

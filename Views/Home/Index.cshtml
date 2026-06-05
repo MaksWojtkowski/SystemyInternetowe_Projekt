@@ -1,49 +1,61 @@
 ﻿@model ArcadeProject.DTOs.HomeIndexDto
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Loc
 @{
-    ViewData["Title"] = "Strona główna";
+    ViewData["Title"] = Loc["Title"];
 }
 
-<link rel="stylesheet" href="~/css/home.css" asp-append-version="true"/>
+@section Styles {
+    <link rel="stylesheet" href="~/css/homeIndex.css" asp-append-version="true"/>
+}
 
+<!-- ── HERO ── -->
 <section class="hero">
-    <div class="hero-label">// Witaj na portalu</div>
-    <h1>Graj. Rywalizuj.<br><span>Zostaw swój ślad.</span></h1>
-    <p>Klasyczne gry przeglądarkowe z globalnym rankingiem, historią rozgrywek i systemem odznak.</p>
+    <div class="hero-label">@Loc["HeroLabel"]</div>
+    <h1>@Loc["HeroTitle"]<br><span>@Loc["HeroTitleAccent"]</span></h1>
+    <p>@Loc["HeroDesc"]</p>
 
     <div class="d-flex gap-3 flex-wrap">
-        <a asp-controller="Game" asp-action="Index" class="btn-arcade btn-primary-arcade">Przeglądaj gry</a>
+        <a asp-controller="Game" asp-action="Index" class="btn-arcade btn-primary-arcade">
+            @Loc["HeroBtnGames"]
+        </a>
         @if (User.Identity is { IsAuthenticated: true })
         {
-            <a asp-controller="Leaderboard" asp-action="Index" class="btn-arcade btn-ghost-arcade">Ranking globalny</a>
+            <a asp-controller="Leaderboard" asp-action="Index" class="btn-arcade btn-ghost-arcade">
+                @Loc["HeroBtnRanking"]
+            </a>
         }
         else
         {
-            <a asp-controller="Account" asp-action="Register" class="btn-arcade btn-ghost-arcade">Zarejestruj się</a>
+            <a asp-controller="Account" asp-action="Register" class="btn-arcade btn-ghost-arcade">
+                @Loc["HeroBtnRegister"]
+            </a>
         }
     </div>
-
 </section>
 
+<!-- ── STATYSTYKI ── -->
 <div class="stats-bar">
     <div class="stat-item">
         <span class="stat-value">@Model.TotalGames</span>
-        <div class="stat-label">Gier dostępnych</div>
+        <div class="stat-label">@Loc["StatsGames"]</div>
     </div>
     <div class="stat-item">
         <span class="stat-value">@Model.TotalSessions</span>
-        <div class="stat-label">Rozegranych partii</div>
+        <div class="stat-label">@Loc["StatsSessions"]</div>
     </div>
     <div class="stat-item">
         <span class="stat-value">@Model.TotalUsers</span>
-        <div class="stat-label">Zarejestrowanych graczy</div>
+        <div class="stat-label">@Loc["StatsUsers"]</div>
     </div>
     <div class="stat-item">
         <span class="stat-value">@Model.TotalThreads</span>
-        <div class="stat-label">Wątków na forum</div>
+        <div class="stat-label">@Loc["StatsThreads"]</div>
     </div>
 </div>
 
-<div class="section-title">DOSTĘPNE GRY</div>
+<!-- ── GIRY ── -->
+<div class="section-title">@Loc["SectionGames"]</div>
 
 @if (Model.Games.Any())
 {
@@ -68,28 +80,48 @@
                 }
                 <div class="game-body">
                     <div class="game-title">@game.Title</div>
+                    @if (!game.IsActive)
+                    {
+                        <div class="game-adminview">
+                            ⚠ NIEAKTYWNA
+                        </div>
+                    }
                     <div class="game-desc">@game.Description</div>
                     <div class="game-meta">
-                        <div class="game-plays">Grano: <span>@game.TotalSessions</span>×</div>
-                        <div class="play-btn">GRAJ &gt;</div>
+                        <div class="game-plays">
+                            @Loc["GamePlayed"] <span>@game.TotalSessions</span>×
+                        </div>
+                        <div class="play-btn">@Loc["GamePlayBtn"]</div>
                     </div>
                 </div>
             </a>
         }
     </div>
+
+    @if (Model.ShowAllGamesLink)
+    {
+        <div style="text-align:center;margin:1rem 0 3rem">
+            <a asp-controller="Game" asp-action="Index" class="games-popular">
+                @Loc["AllGamesLink"]
+            </a>
+        </div>
+    }
 }
 else
 {
     <div class="empty-state">
         <div class="icon">🕹️</div>
-        <p>Brak gier — administrator wkrótce doda pierwsze tytuły.</p>
+        <p>@Loc["GamesEmpty"]</p>
     </div>
 }
 
+<!-- ── FORUM TEASER ── -->
 <div class="forum-teaser">
     <div class="forum-teaser-text">
-        <h3>FORUM GRACZY</h3>
-        <p>Podziel się strategią, zgłoś buga albo po prostu pogadaj o grach z innymi graczami.</p>
+        <h3>@Loc["ForumTitle"]</h3>
+        <p>@Loc["ForumDesc"]</p>
     </div>
-    <a asp-controller="Forum" asp-action="Index" class="btn-arcade btn-ghost-arcade">Przejdź do forum</a>
+    <a asp-controller="Forum" asp-action="Index" class="btn-arcade btn-ghost-arcade">
+        @Loc["ForumBtn"]
+    </a>
 </div>
