@@ -23,7 +23,6 @@
     }
 </div>
 
-<!-- ── FILTRY ── -->
 <div class="forum-filters">
     <a class="filter-chip @(Model.FilterGameId is null ? "active" : "")"
        asp-action="Index">Wszystkie</a>
@@ -36,7 +35,6 @@
     }
 </div>
 
-<!-- ── LISTA WĄTKÓW ── -->
 @if (Model.Threads.Any())
 {
     <div class="thread-list">

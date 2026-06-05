@@ -7,8 +7,7 @@
     const elBest       = document.getElementById('statBest');
     const elTime       = document.getElementById('statTime');
     const elSaveStatus = document.getElementById('saveStatus');
-
-    // ── Menu show/hide ────────────────────────────────────────────────────────
+    
     function hideMenu() {
         menu?.classList.add('hidden');
     }
@@ -21,16 +20,14 @@
         if (btnStart) btnStart.textContent = btnLabel ?? 'START';
         menu?.classList.remove('hidden');
     }
-
-    // ── Przycisk START ────────────────────────────────────────────────────────
+    
     if (btnStart) {
         btnStart.addEventListener('click', () => {
             hideMenu();
             if (typeof window.gameStart === 'function') window.gameStart();
         });
     }
-
-    // Spacja gdy menu widoczne
+    
     document.addEventListener('keydown', e => {
         if (e.code === 'Space' && menu && !menu.classList.contains('hidden')) {
             e.preventDefault();
@@ -38,7 +35,52 @@
         }
     });
 
-    // ── Zapis wyniku ──────────────────────────────────────────────────────────
+    function showAchievementToast(icon, name, description) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--ap-surface, #13131c);
+            border: 1px solid rgba(250,204,21,.4);
+            border-radius: 10px;
+            padding: .75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            z-index: 9999;
+            animation: slideIn .3s ease;
+            max-width: 280px;
+            box-shadow: 0 4px 24px rgba(0,0,0,.5);
+        `;
+        toast.innerHTML = `
+            <span style="font-size:1.5rem">${icon}</span>
+            <div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:.5rem;
+                            color:#facc15;letter-spacing:.06em;margin-bottom:.3rem">
+                    ODZNAKA!
+                </div>
+                <div style="font-size:.8rem;font-weight:600;color:#e2e2ec">${name}</div>
+                <div style="font-size:.72rem;color:#6b6b85;margin-top:.15rem">${description}</div>
+            </div>
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = `@keyframes slideIn {
+            from { opacity:0; transform: translateX(20px); }
+            to   { opacity:1; transform: translateX(0); }
+        }`;
+        document.head.appendChild(style);
+        document.body.appendChild(toast);
+
+        // Znikaj po 4 sekundach
+        setTimeout(() => {
+            toast.style.transition = 'opacity .3s';
+            toast.style.opacity    = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+    
     async function saveScore(score, durationSeconds) {
         elSaveStatus.textContent = 'Zapisywanie…';
         elSaveStatus.className   = 'save-status';
@@ -59,11 +101,20 @@
             });
 
             if (res.ok) {
+                const data = await res.json();
                 elSaveStatus.textContent = '✓ Wynik zapisany';
                 elSaveStatus.className   = 'save-status ok';
                 if (!window.ARCADE.personalBest || score > window.ARCADE.personalBest) {
                     elBest.textContent         = score.toLocaleString('pl-PL');
                     window.ARCADE.personalBest = score;
+                }
+
+                if (data.newAchievements?.length > 0) {
+                    data.newAchievements.forEach((a, i) => {
+                        setTimeout(() => {
+                            showAchievementToast(a.icon, a.name, a.description);
+                        }, i * 2500);
+                    });
                 }
             } else {
                 const err = await res.json().catch(() => ({}));
@@ -75,8 +126,7 @@
             elSaveStatus.className   = 'save-status err';
         }
     }
-
-    // ── window.arcade API ─────────────────────────────────────────────────────
+    
     window.arcade = {
 
         setScore(val) {

@@ -4,11 +4,9 @@
 <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true"/>
 
 <div class="profile-grid">
-
-    <!-- ── SIDEBAR ── -->
+    
     <aside class="profile-sidebar">
-
-        <!-- Avatar + info -->
+        
         <div class="profile-card">
             <div class="profile-avatar-wrap">
                 @if (!string.IsNullOrEmpty(Model.AvatarUrl))
@@ -28,8 +26,7 @@
                 <div class="profile-joined">od @Model.CreatedAt.ToString("dd.MM.yyyy")</div>
             </div>
         </div>
-
-        <!-- Statystyki -->
+        
         <div class="profile-card">
             <div class="profile-card-header">STATYSTYKI</div>
             <div class="profile-card-body">
@@ -53,8 +50,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Nawigacja -->
+        
         <div class="profile-card">
             <div class="profile-card-body" style="padding:.5rem">
                 <nav class="profile-nav">
@@ -72,11 +68,9 @@
         </div>
 
     </aside>
-
-    <!-- ── GŁÓWNA TREŚĆ ── -->
+    
     <div class="profile-main">
-
-        <!-- Historia rozgrywek -->
+        
         <div class="content-card">
             <div class="content-card-header">
                 OSTATNIE ROZGRYWKI
@@ -121,8 +115,7 @@
                 }
             </div>
         </div>
-
-        <!-- Odznaki -->
+        
         <div class="content-card">
             <div class="content-card-header">ODZNAKI</div>
             <div class="content-card-body">
