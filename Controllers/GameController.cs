@@ -11,9 +11,7 @@ public class GameController : Controller
     private readonly AppDbContext _db;
     private readonly IMemoryCache _cache;
     private readonly ILogger<GameController> _logger;
-
-    // Lista slugów które mają swoje pliki JS/CSS w wwwroot/js/games/ i css/games/
-    // Rozszerzaj tę listę wraz z dodawaniem nowych gier
+    
     private static readonly HashSet<string> KnownGames = ["snake", "tetris", "flappy"];
 
     public GameController(AppDbContext db, IMemoryCache cache, ILogger<GameController> logger)
@@ -22,11 +20,9 @@ public class GameController : Controller
         _cache  = cache;
         _logger = logger;
     }
-
-    // GET /Game  →  lista wszystkich aktywnych gier
+    
     public async Task<IActionResult> Index()
     {
-        // Admin widzi wszystkie gry, zwykły użytkownik tylko aktywne
         var isAdmin = User.IsInRole("Admin");
         
         var games = await _db.Games
@@ -46,8 +42,7 @@ public class GameController : Controller
 
         return View(games);
     }
-
-    // GET /Game/Play/snake  →  widok konkretnej gry
+    
     public async Task<IActionResult> Play(string slug)
     {
         if (string.IsNullOrWhiteSpace(slug))
@@ -67,8 +62,7 @@ public class GameController : Controller
             TempData["Error"] = $"Gra \"{slug}\" nie istnieje lub jest niedostępna.";
             return RedirectToAction(nameof(Index));
         }
-
-        // Top 10 wyników — cache 60 sekund żeby nie walić w DB przy każdym wejściu
+        
         var cacheKey = $"leaderboard:{slug}";
         var topScores = await _cache.GetOrCreateAsync(cacheKey, async entry =>
         {
@@ -87,13 +81,11 @@ public class GameController : Controller
                 })
                 .ToListAsync();
         }) ?? [];
-
-        // Nadaj rangi (1, 2, 3…) po pobraniu z cache
+        
         var ranked = topScores
             .Select((e, i) => e with { Rank = i + 1 })
             .ToList();
-
-        // Osobisty rekord zalogowanego gracza
+        
         int? personalBest = null;
         if (User.Identity?.IsAuthenticated == true)
         {
@@ -121,10 +113,9 @@ public class GameController : Controller
         };
 
         _logger.LogInformation("User entered game: {Slug}", slug);
-        return View(dto);   // zawsze renderuje Views/Game/Play.cshtml
+        return View(dto);
     }
-
-    // POST /api/scores  →  zapis wyniku przez fetch() z JS gry
+    
     [HttpPost("/api/scores")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SaveScore([FromBody] SaveScoreRequest request)
@@ -144,7 +135,7 @@ public class GameController : Controller
             .Select(u => u.Id)
             .FirstOrDefault();
 
-        var session = new TestTest.Models.GameSession
+        var session = new ArcadeProject.Models.GameSession
         {
             GameId          = game.Id,
             UserId          = userId,
@@ -155,8 +146,7 @@ public class GameController : Controller
 
         _db.GameSessions.Add(session);
         await _db.SaveChangesAsync();
-
-        // Unieważnij cache leaderboardu dla tej gry
+        
         _cache.Remove($"leaderboard:{request.GameSlug}");
 
         _logger.LogInformation("Score saved: {User} → {Game} = {Score}",
@@ -166,5 +156,4 @@ public class GameController : Controller
     }
 }
 
-/// <summary>Body JSON z fetch() wysyłanego przez JS gry.</summary>
 public record SaveScoreRequest(string GameSlug, int Score, int DurationSeconds);

@@ -92,8 +92,5 @@ public class AppDbContext : IdentityDbContext<User>
          .HasForeignKey(p => p.UserId)
          .OnDelete(DeleteBehavior.Cascade);
     });
-
-    // Tu można wstawić Seedowanie później
-    
     }
 }

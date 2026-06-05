@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ArcadeProject.DTOs;
+using ArcadeProject.DTOs.AccountDTO;
 using ArcadeProject.Models;
 using ArcadeProject.Services;
 
@@ -121,7 +121,7 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    // ── RESET HASŁA — krok 1: formularz email ─────────────────────────────────
+    // ── RESET HASŁA — formularz email ─────────────────────────────────
 
     [HttpGet]
     public IActionResult ForgotPassword() => View();
@@ -146,7 +146,7 @@ public class AccountController : Controller
         return RedirectToAction(nameof(Login));
     }
 
-    // ── RESET HASŁA — krok 2: nowe hasło ─────────────────────────────────────
+    // ── RESET HASŁA — nowe hasło ─────────────────────────────────────
 
     [HttpGet]
     public IActionResult ResetPassword(string userId, string token)

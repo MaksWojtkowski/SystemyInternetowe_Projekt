@@ -8,4 +8,5 @@ public class GameDto
     public string? Description  { get; init; }
     public string? ThumbnailUrl { get; init; }
     public int     TotalSessions { get; init; }
+    public bool IsActive { get; set; }
 }

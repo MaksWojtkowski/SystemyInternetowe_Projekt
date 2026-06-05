@@ -1,4 +1,4 @@
-﻿@model ArcadeProject.DTOs.ThreadDetailDto
+﻿@model ArcadeProject.DTOs.ForumDTO.ThreadDetailDto
 @{ ViewData["Title"] = Model.Title; }
 @{
     var currentUserId = (await UserManager.GetUserAsync(User))?.Id ?? "";

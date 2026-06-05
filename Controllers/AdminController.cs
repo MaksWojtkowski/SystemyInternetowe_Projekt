@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ArcadeProject.Data;
-using ArcadeProject.DTOs;
+using ArcadeProject.DTOs.AdminDTO;
 using ArcadeProject.Models;
 
 namespace ArcadeProject.Controllers;
@@ -202,8 +202,7 @@ public class AdminController : Controller
         await _db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
-
-    // POST /Admin/ToggleGame?id=1
+    
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> ToggleGame(int id)
     {

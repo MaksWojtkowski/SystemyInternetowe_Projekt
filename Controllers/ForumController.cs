@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ArcadeProject.Data;
 using ArcadeProject.DTOs;
+using ArcadeProject.DTOs.ForumDTO;
 using ArcadeProject.Models;
 
 namespace ArcadeProject.Controllers;
@@ -22,7 +23,7 @@ public class ForumController : Controller
         _logger      = logger;
     }
 
-    // ── INDEX — lista wątków (opcjonalnie filtrowana per gra) ─────────────────
+    // ── INDEX —─────────────────
     public async Task<IActionResult> Index(int? gameId)
     {
         var query = _db.Threads
@@ -82,7 +83,7 @@ public class ForumController : Controller
         return View(dto);
     }
 
-    // ── THREAD — widok wątku z postami ────────────────────────────────────────
+    // ── THREAD —────────────────────────────────────────
     public async Task<IActionResult> Thread(int id)
     {
         var thread = await _db.Threads
@@ -123,7 +124,7 @@ public class ForumController : Controller
         return View(thread);
     }
 
-    // ── CREATE THREAD — formularz ─────────────────────────────────────────────
+    // ── CREATE THREAD —─────────────────────────────────────────────
 
     [Authorize]
     public async Task<IActionResult> Create(int? gameId)
@@ -176,7 +177,7 @@ public class ForumController : Controller
         return RedirectToAction(nameof(Thread), new { id = thread.Id });
     }
 
-    // ── ADD POST — odpowiedź w wątku ─────────────────────────────────────────
+    // ── ADD POST —─────────────────────────────────────────
 
     [Authorize, HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> AddPost(CreatePostDto dto)
@@ -210,7 +211,7 @@ public class ForumController : Controller
                         + $"#post-{post.Id}");
     }
 
-    // ── EDIT POST — formularz edycji ─────────────────────────────────────────
+    // ── EDIT POST —─────────────────────────────────────────
     [Authorize]
     public async Task<IActionResult> EditPost(int id)
     {

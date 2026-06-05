@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using ArcadeProject.Data;
-using ArcadeProject.DTOs;
+using ArcadeProject.DTOs.LeaderboardDTO;
 
 namespace ArcadeProject.Controllers;
 
@@ -16,8 +16,7 @@ public class LeaderboardController : Controller
         _db    = db;
         _cache = cache;
     }
-
-    // GET /Leaderboard
+    
     public async Task<IActionResult> Index()
     {
         var dto = await _cache.GetOrCreateAsync("leaderboard:global", async entry =>
@@ -31,9 +30,6 @@ public class LeaderboardController : Controller
 
     private async Task<LeaderboardIndexDto> BuildLeaderboardAsync()
     {
-        // ── Globalny ranking — suma NAJLEPSZEGO wyniku per gra per gracz ─────
-        // Dlaczego najlepszy a nie suma wszystkich? Bo inaczej ktoś kto
-        // gra 100x w snake z wynikiem 1 pkt pokonałby kogoś kto raz zdobył 500.
         var globalRaw = await _db.GameSessions
             .GroupBy(s => new { s.UserId, s.GameId })
             .Select(g => new
@@ -45,8 +41,7 @@ public class LeaderboardController : Controller
                 Sessions  = g.Count()
             })
             .ToListAsync();
-
-        // Agreguj per gracz
+        
         var perPlayer = globalRaw
             .GroupBy(x => x.UserId)
             .Select(g =>
@@ -63,8 +58,7 @@ public class LeaderboardController : Controller
             })
             .OrderByDescending(x => x.TotalScore)
             .ToList();
-
-        // Pobierz nazwy użytkowników
+        
         var userIds   = perPlayer.Select(x => x.UserId).ToList();
         var userNames = await _db.Users
             .Where(u => userIds.Contains(u.Id))
@@ -82,8 +76,7 @@ public class LeaderboardController : Controller
                 BestGameScore = x.BestGameScore,
             })
             .ToList();
-
-        // ── Top 10 per gra ────────────────────────────────────────────────────
+        
         var games = await _db.Games
             .Where(g => g.IsActive)
             .OrderBy(g => g.Title)
@@ -125,8 +118,7 @@ public class LeaderboardController : Controller
                 }).ToList()
             });
         }
-
-        // ── Statystyki nagłówkowe ─────────────────────────────────────────────
+        
         var topScore = globalEntries.FirstOrDefault();
 
         return new LeaderboardIndexDto

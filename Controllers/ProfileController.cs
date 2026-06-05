@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ArcadeProject.Data;
-using ArcadeProject.DTOs;
+using ArcadeProject.DTOs.ProfileDTO;
 using ArcadeProject.Models;
 
 namespace ArcadeProject.Controllers;
