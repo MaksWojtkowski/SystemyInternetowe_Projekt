@@ -1,4 +1,4 @@
-﻿.hero {
+.hero {
     padding: 5rem 0 4rem;
     position: relative;
     overflow: hidden;
@@ -225,4 +225,21 @@
     color: var(--ap-muted);
     font-size: .88rem;
     margin: 0;
+}
+
+.games-popular {
+    font-family:var(--ap-font-game);
+    font-size:.52rem;
+    color:var(--ap-muted);
+    text-decoration:none;
+    letter-spacing:.08em;
+    transition:color .2s;
+}
+
+.game-adminview {
+    font-family:var(--ap-font-game);
+    font-size:.42rem;
+    color:#facc15;
+    letter-spacing:.06em;
+    margin-bottom:.4rem;
 }

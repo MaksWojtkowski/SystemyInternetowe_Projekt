@@ -1,0 +1,194 @@
+/*
+ * auth.css — style dla stron logowania, rejestracji, resetu hasła.
+ */
+
+/* ── LAYOUT ─────────────────────────────────────────────────────────────── */
+.auth-page {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--ap-surface);
+    border: 1px solid var(--ap-border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Dekoracyjny pasek na górze karty */
+.auth-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--ap-accent), var(--ap-accent2));
+}
+
+/* ── NAGŁÓWEK ────────────────────────────────────────────────────────────── */
+.auth-title {
+    font-family: var(--ap-font-game);
+    font-size: .8rem;
+    color: var(--ap-text);
+    letter-spacing: .12em;
+    margin-bottom: .5rem;
+}
+
+.auth-sub {
+    font-size: .85rem;
+    color: var(--ap-muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.auth-sub a {
+    color: var(--ap-accent);
+    text-decoration: none;
+}
+.auth-sub a:hover { text-decoration: underline; }
+
+/* ── FORMULARZ ───────────────────────────────────────────────────────────── */
+.auth-form { display: flex; flex-direction: column; gap: 1.1rem; }
+
+.form-field { display: flex; flex-direction: column; gap: .4rem; }
+
+.form-label {
+    font-size: .75rem;
+    color: var(--ap-muted);
+    letter-spacing: .06em;
+    font-weight: 500;
+}
+
+.form-input {
+    background: var(--ap-bg);
+    border: 1px solid var(--ap-border);
+    border-radius: 8px;
+    padding: .7rem 1rem;
+    color: var(--ap-text);
+    font-size: .9rem;
+    font-family: var(--ap-font-ui);
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+    width: 100%;
+}
+.form-input::placeholder { color: var(--ap-muted); opacity: .6; }
+.form-input:focus {
+    border-color: var(--ap-accent);
+    box-shadow: 0 0 0 3px rgba(0, 229, 255, .1);
+}
+.form-input.is-invalid {
+    border-color: #f87171;
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, .1);
+}
+
+/* Pole hasła z przyciskiem pokaż/ukryj */
+.input-password-wrapper { position: relative; }
+.input-password-wrapper .form-input { padding-right: 2.8rem; }
+.btn-toggle-password {
+    position: absolute;
+    right: .75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--ap-muted);
+    cursor: pointer;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1;
+    transition: color .2s;
+}
+.btn-toggle-password:hover { color: var(--ap-text); }
+
+/* Walidacja */
+.field-error {
+    font-size: .75rem;
+    color: #f87171;
+    margin-top: .1rem;
+}
+
+/* Checkbox "zapamiętaj mnie" */
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.form-check input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--ap-accent);
+    cursor: pointer;
+}
+.form-check label {
+    font-size: .82rem;
+    color: var(--ap-muted);
+    cursor: pointer;
+}
+
+/* ── PRZYCISKI ───────────────────────────────────────────────────────────── */
+.btn-auth {
+    font-family: var(--ap-font-game);
+    font-size: .6rem;
+    letter-spacing: .08em;
+    padding: .85rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .2s, opacity .2s;
+    margin-top: .25rem;
+    width: 100%;
+}
+.btn-auth:hover  { transform: translateY(-1px); }
+.btn-auth:active { transform: translateY(0); }
+
+.btn-auth-primary {
+    background: var(--ap-accent);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 229, 255, .2);
+}
+.btn-auth-primary:hover { box-shadow: 0 0 30px rgba(0, 229, 255, .4); }
+
+/* ── SEPARATOR ───────────────────────────────────────────────────────────── */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--ap-muted);
+    font-size: .75rem;
+    margin: .5rem 0;
+}
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--ap-border);
+}
+
+/* ── BŁĄD GLOBALNY (Identity errors) ────────────────────────────────────── */
+.auth-errors {
+    background: rgba(248, 113, 113, .08);
+    border: 1px solid rgba(248, 113, 113, .25);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    font-size: .82rem;
+    color: #f87171;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+/* ── LINK FORGOT PASSWORD ────────────────────────────────────────────────── */
+.forgot-link {
+    font-size: .78rem;
+    color: var(--ap-muted);
+    text-decoration: none;
+    text-align: right;
+    transition: color .2s;
+}
+.forgot-link:hover { color: var(--ap-accent); }

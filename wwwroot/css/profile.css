@@ -1,0 +1,276 @@
+/* profile.css — profil użytkownika i ustawienia */
+
+/* ── LAYOUT ──────────────────────────────────────────────────────────────── */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 2rem 0;
+}
+@media (max-width: 768px) {
+    .profile-grid { grid-template-columns: 1fr; }
+}
+
+/* ── KARTA BOCZNA ────────────────────────────────────────────────────────── */
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.profile-card {
+    background: var(--ap-surface);
+    border: 1px solid var(--ap-border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.profile-card-header {
+    font-family: var(--ap-font-game);
+    font-size: .52rem;
+    letter-spacing: .12em;
+    color: var(--ap-muted);
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--ap-border);
+}
+.profile-card-body { padding: 1rem; }
+
+/* Avatar */
+.profile-avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1rem 1rem;
+    gap: .75rem;
+}
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--ap-border);
+}
+.profile-avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ap-accent), var(--ap-accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--ap-font-game);
+    font-size: 1.5rem;
+    color: #000;
+    font-weight: bold;
+}
+.profile-username {
+    font-family: var(--ap-font-game);
+    font-size: .65rem;
+    color: var(--ap-text);
+    letter-spacing: .08em;
+}
+.profile-role-badge {
+    font-family: var(--ap-font-game);
+    font-size: .42rem;
+    padding: .2rem .6rem;
+    border-radius: 20px;
+    letter-spacing: .08em;
+}
+.role-admin {
+    background: rgba(255,45,120,.15);
+    border: 1px solid rgba(255,45,120,.3);
+    color: var(--ap-accent2);
+}
+.role-user {
+    background: rgba(0,229,255,.08);
+    border: 1px solid rgba(0,229,255,.2);
+    color: var(--ap-accent);
+}
+.profile-joined {
+    font-size: .72rem;
+    color: var(--ap-muted);
+}
+
+/* Statystyki w sidebarze */
+.profile-stats {
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+}
+.profile-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .55rem 0;
+    border-bottom: 1px solid rgba(255,255,255,.03);
+    font-size: .82rem;
+}
+.profile-stat-row:last-child { border-bottom: none; }
+.profile-stat-row .label { color: var(--ap-muted); }
+.profile-stat-row .value {
+    font-family: var(--ap-font-game);
+    font-size: .58rem;
+    color: var(--ap-accent);
+}
+
+/* Linki nawigacji profilu */
+.profile-nav { display: flex; flex-direction: column; gap: .25rem; padding: .5rem; }
+.profile-nav-link {
+    font-size: .82rem;
+    color: var(--ap-muted);
+    text-decoration: none;
+    padding: .5rem .75rem;
+    border-radius: 6px;
+    transition: background .15s, color .15s;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.profile-nav-link:hover { background: rgba(255,255,255,.05); color: var(--ap-text); }
+.profile-nav-link.danger:hover { background: rgba(248,113,113,.08); color: #f87171; }
+
+/* ── GŁÓWNA TREŚĆ ────────────────────────────────────────────────────────── */
+.profile-main { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.content-card {
+    background: var(--ap-surface);
+    border: 1px solid var(--ap-border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.content-card-header {
+    font-family: var(--ap-font-game);
+    font-size: .55rem;
+    letter-spacing: .12em;
+    color: var(--ap-muted);
+    padding: .75rem 1.25rem;
+    border-bottom: 1px solid var(--ap-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.content-card-body { padding: 1.25rem; }
+
+/* Historia sesji */
+.session-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .82rem;
+}
+.session-table th {
+    font-family: var(--ap-font-game);
+    font-size: .45rem;
+    color: var(--ap-muted);
+    letter-spacing: .1em;
+    padding: .5rem .75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--ap-border);
+    font-weight: normal;
+}
+.session-table th.right,
+.session-table td.right { text-align: right; }
+.session-table td {
+    padding: .55rem .75rem;
+    color: var(--ap-muted);
+    border-bottom: 1px solid rgba(255,255,255,.03);
+}
+.session-table tr:last-child td { border-bottom: none; }
+.session-table tr:hover td { color: var(--ap-text); }
+.session-table td.game-name { color: var(--ap-text); }
+.session-table td.score-val {
+    font-family: var(--ap-font-game);
+    font-size: .55rem;
+    color: var(--ap-accent);
+}
+.session-empty {
+    text-align: center;
+    padding: 2rem;
+    color: var(--ap-muted);
+    font-size: .82rem;
+}
+
+/* Odznaki */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: .75rem;
+}
+.achievement-item {
+    background: rgba(255,255,255,.02);
+    border: 1px solid var(--ap-border);
+    border-radius: 8px;
+    padding: .75rem;
+    display: flex;
+    gap: .75rem;
+    align-items: flex-start;
+}
+.achievement-icon { font-size: 1.5rem; flex-shrink: 0; }
+.achievement-name {
+    font-size: .78rem;
+    font-weight: 500;
+    color: var(--ap-text);
+    margin-bottom: .2rem;
+}
+.achievement-desc { font-size: .72rem; color: var(--ap-muted); line-height: 1.4; }
+.achievement-date { font-size: .68rem; color: var(--ap-muted); margin-top: .3rem; }
+.achievements-empty {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--ap-muted);
+    font-size: .82rem;
+}
+
+/* ── FORMULARZ USTAWIEŃ ──────────────────────────────────────────────────── */
+.settings-form { display: flex; flex-direction: column; gap: 1rem; max-width: 480px; }
+.settings-field { display: flex; flex-direction: column; gap: .4rem; }
+.settings-label {
+    font-size: .75rem;
+    color: var(--ap-muted);
+    letter-spacing: .06em;
+}
+.settings-input {
+    background: var(--ap-bg);
+    border: 1px solid var(--ap-border);
+    border-radius: 8px;
+    padding: .65rem 1rem;
+    color: var(--ap-text);
+    font-size: .88rem;
+    font-family: var(--ap-font-ui);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+.settings-input:focus {
+    border-color: var(--ap-accent);
+    box-shadow: 0 0 0 3px rgba(0,229,255,.1);
+}
+.field-error { font-size: .75rem; color: #f87171; }
+.settings-actions { display: flex; gap: .75rem; margin-top: .25rem; flex-wrap: wrap; }
+.btn-settings-save {
+    font-family: var(--ap-font-game);
+    font-size: .55rem;
+    padding: .65rem 1.25rem;
+    background: var(--ap-accent);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: .06em;
+    transition: box-shadow .2s, transform .15s;
+}
+.btn-settings-save:hover {
+    box-shadow: 0 0 20px rgba(0,229,255,.35);
+    transform: translateY(-1px);
+}
+.btn-settings-cancel {
+    font-family: var(--ap-font-game);
+    font-size: .55rem;
+    padding: .65rem 1rem;
+    background: transparent;
+    color: var(--ap-muted);
+    border: 1px solid var(--ap-border);
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: .06em;
+    transition: border-color .2s, color .2s;
+    display: inline-block;
+}
+.btn-settings-cancel:hover { border-color: var(--ap-muted); color: var(--ap-text); }

@@ -1,0 +1,265 @@
+/* ── LAYOUT GRZYBKA ── */
+.game-page {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    grid-template-rows: auto 1fr;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .game-page { grid-template-columns: 1fr; }
+    .game-sidebar { order: 2; }
+    .game-main    { order: 1; }
+}
+
+/* ── HEADER GIRY ── */
+.game-header {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.game-header-back {
+    font-family: var(--ap-font-game);
+    font-size: .5rem;
+    color: var(--ap-muted);
+    text-decoration: none;
+    letter-spacing: .08em;
+    transition: color .2s;
+}
+.game-header-back:hover { color: var(--ap-accent); }
+.game-header h1 {
+    font-family: var(--ap-font-game);
+    font-size: .85rem;
+    color: var(--ap-text);
+    letter-spacing: .1em;
+    margin: 0;
+}
+.game-header p {
+    color: var(--ap-muted);
+    font-size: .82rem;
+    margin: 0;
+    flex-basis: 100%;
+}
+
+/* ── MAIN — KONTENER GRY ── */
+.game-main {
+    background: var(--ap-surface);
+    border: 1px solid var(--ap-border);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.game-canvas-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    min-height: 420px;
+    background: #050508;
+    position: relative;
+}
+
+/* ── OVERLAY przed startem ── */
+.game-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5,5,8,.88);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    gap: 1rem;
+    transition: opacity .3s;
+}
+.game-overlay.hidden { opacity: 0; pointer-events: none; }
+.game-overlay-title {
+    font-family: var(--ap-font-game);
+    font-size: .8rem;
+    color: var(--ap-accent);
+    letter-spacing: .1em;
+    text-shadow: 0 0 16px var(--ap-accent);
+}
+.game-overlay-sub {
+    font-size: .82rem;
+    color: var(--ap-muted);
+}
+.btn-start {
+    font-family: var(--ap-font-game);
+    font-size: .6rem;
+    padding: .75rem 2rem;
+    background: var(--ap-accent);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: .08em;
+    transition: box-shadow .2s, transform .15s;
+}
+.btn-start:hover {
+    box-shadow: 0 0 24px rgba(0,229,255,.5);
+    transform: translateY(-2px);
+}
+
+/* Pasek statusu pod canvasem */
+.game-statusbar {
+    padding: .75rem 1.25rem;
+    border-top: 1px solid var(--ap-border);
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.game-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.game-stat-value {
+    font-family: var(--ap-font-game);
+    font-size: .7rem;
+    color: var(--ap-accent);
+}
+.game-stat-label {
+    font-size: .72rem;
+    color: var(--ap-muted);
+    margin-top: 2px;
+}
+.save-status {
+    margin-left: auto;
+    font-size: .78rem;
+    color: var(--ap-muted);
+}
+.save-status.ok  { color: #34d399; }
+.save-status.err { color: #f87171; }
+
+/* ── SIDEBAR ── */
+.game-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sidebar-card {
+    background: var(--ap-surface);
+    border: 1px solid var(--ap-border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.sidebar-card-header {
+    font-family: var(--ap-font-game);
+    font-size: .55rem;
+    letter-spacing: .12em;
+    color: var(--ap-muted);
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--ap-border);
+}
+.sidebar-card-body { padding: .75rem 1rem; }
+
+/* Personal best */
+.personal-best {
+    text-align: center;
+    padding: 1rem;
+}
+.personal-best-value {
+    font-family: var(--ap-font-game);
+    font-size: 1.4rem;
+    color: var(--ap-accent2);
+    text-shadow: 0 0 20px rgba(255,45,120,.4);
+    display: block;
+}
+.personal-best-label {
+    font-size: .75rem;
+    color: var(--ap-muted);
+    margin-top: .25rem;
+}
+
+/* Leaderboard */
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .8rem;
+}
+.leaderboard-table td {
+    padding: .4rem .25rem;
+    border-bottom: 1px solid var(--ap-border);
+    color: var(--ap-muted);
+    vertical-align: middle;
+}
+.leaderboard-table tr:last-child td { border-bottom: none; }
+.leaderboard-table tr:hover td { color: var(--ap-text); }
+
+.rank-badge {
+    font-family: var(--ap-font-game);
+    font-size: .5rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ap-border);
+    color: var(--ap-muted);
+}
+.rank-badge.gold   { background: rgba(250,204,21,.15); color: #facc15; }
+.rank-badge.silver { background: rgba(148,163,184,.15); color: #94a3b8; }
+.rank-badge.bronze { background: rgba(180,120,60,.15);  color: #b4783c; }
+
+.lb-score {
+    font-family: var(--ap-font-game);
+    font-size: .55rem;
+    color: var(--ap-accent);
+    text-align: right;
+}
+.lb-user { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.empty-lb {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--ap-muted);
+    font-size: .8rem;
+}
+
+/* Kontrolki */
+.controls-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+}
+.controls-list li {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .78rem;
+    color: var(--ap-muted);
+}
+.key {
+    font-family: var(--ap-font-game);
+    font-size: .45rem;
+    background: var(--ap-border);
+    border-radius: 4px;
+    padding: .2rem .4rem;
+    color: var(--ap-text);
+    white-space: nowrap;
+}
+
+/* Niezalogowany banner */
+.login-nudge {
+    background: rgba(255,45,120,.07);
+    border: 1px solid rgba(255,45,120,.2);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    font-size: .78rem;
+    color: var(--ap-muted);
+    text-align: center;
+    line-height: 1.6;
+}
+.login-nudge a { color: var(--ap-accent2); }

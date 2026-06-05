@@ -1,0 +1,59 @@
+/*
+ * snake.css — style specyficzne dla gry Snake
+ */
+
+#gameCanvas {
+    width:  480px;
+    height: 480px;
+    border: 1px solid rgba(0, 229, 255, .1);
+    border-radius: 4px;
+    image-rendering: pixelated;
+    display: block;
+}
+
+/* Menu trudności — klasy używane w _snake.cshtml */
+.snake-diff-grid {
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: .25rem;
+}
+
+.btn-diff {
+    font-family: var(--ap-font-game);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .35rem;
+    padding: .75rem 1.25rem;
+    min-width: 90px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, transform .15s;
+}
+.btn-diff:hover { transform: translateY(-2px); }
+
+.btn-diff-label {
+    font-size: .55rem;
+    letter-spacing: .08em;
+}
+.btn-diff-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .72rem;
+    color: var(--ap-muted);
+}
+
+.btn-diff--easy   { border-color: rgba(52,211,153,.3); }
+.btn-diff--easy   .btn-diff-label { color: #34d399; }
+.btn-diff--easy:hover { border-color: #34d399; background: rgba(52,211,153,.08); }
+
+.btn-diff--medium { border-color: rgba(250,204,21,.3); }
+.btn-diff--medium .btn-diff-label { color: #facc15; }
+.btn-diff--medium:hover { border-color: #facc15; background: rgba(250,204,21,.08); }
+
+.btn-diff--hard   { border-color: rgba(255,45,120,.3); }
+.btn-diff--hard   .btn-diff-label { color: var(--ap-accent2); }
+.btn-diff--hard:hover { border-color: var(--ap-accent2); background: rgba(255,45,120,.08); }
