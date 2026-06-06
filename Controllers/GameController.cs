@@ -13,8 +13,6 @@ public class GameController : Controller
     private readonly IMemoryCache _cache;
     private readonly ILogger<GameController> _logger;
     private readonly AchievementService _achievements;
-    
-    private static readonly HashSet<string> KnownGames = ["snake", "tetris", "flappy"];
 
     public GameController(AppDbContext db, IMemoryCache cache, ILogger<GameController> logger, AchievementService achievements)
     {

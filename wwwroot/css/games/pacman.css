@@ -1,0 +1,11 @@
+﻿/*
+ * pacman.css — style dla gry Pac-Man
+ */
+
+#gameCanvas {
+    width:  608px;   /* 19 kolumn * 32px */
+    height: 672px;   /* 21 wierszy * 32px */
+    background: #000;
+    display: block;
+    image-rendering: pixelated;
+}

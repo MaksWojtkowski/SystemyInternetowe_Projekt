@@ -37,22 +37,7 @@
 
     function showAchievementToast(icon, name, description) {
         const toast = document.createElement('div');
-        toast.style.cssText = `
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--ap-surface, #13131c);
-            border: 1px solid rgba(250,204,21,.4);
-            border-radius: 10px;
-            padding: .75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: .75rem;
-            z-index: 9999;
-            animation: slideIn .3s ease;
-            max-width: 280px;
-            box-shadow: 0 4px 24px rgba(0,0,0,.5);
-        `;
+        toast.className = 'achievement-toast';
         toast.innerHTML = `
             <span style="font-size:1.5rem">${icon}</span>
             <div>
@@ -66,10 +51,7 @@
         `;
         
         const style = document.createElement('style');
-        style.textContent = `@keyframes slideIn {
-            from { opacity:0; transform: translateX(20px); }
-            to   { opacity:1; transform: translateX(0); }
-        }`;
+        style.className = 'slideIn';
         document.head.appendChild(style);
         document.body.appendChild(toast);
 

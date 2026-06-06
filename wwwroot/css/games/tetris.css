@@ -1,0 +1,7 @@
+﻿#gameCanvas {
+    width:  524px;
+    height: 640px;
+    display: block;
+    border-radius: 8px;
+    image-rendering: pixelated;
+}
