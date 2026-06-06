@@ -215,4 +215,110 @@ public class AdminController : Controller
         TempData["Success"] = $"Gra \"{game.Title}\" {(game.IsActive ? "włączona" : "wyłączona")}.";
         return RedirectToAction(nameof(Index));
     }
+    
+    // ── ZARZĄDZANIE ACHIEVEMENTAMI ────────────────────────────────────────────
+    
+    [HttpGet]
+    public async Task<IActionResult> Achievements(int gameId)
+    {
+        var game = await _db.Games.FindAsync(gameId);
+        if (game is null) return NotFound();
+
+        var achievements = await _db.Achievements
+            .Where(a => a.GameId == gameId)
+            .Select(a => new AchievementItemDto
+            {
+                Id            = a.Id,
+                Name          = a.Name,
+                Description   = a.Description,
+                IconUrl       = a.IconUrl,
+                Condition     = a.Condition,
+                UnlockedCount = a.UserAchievements.Count(),
+            })
+            .ToListAsync();
+
+        return View(new GameAchievementsDto
+        {
+            GameId       = game.Id,
+            GameTitle    = game.Title,
+            Achievements = achievements,
+        });
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> AchievementForm(int gameId, int? id)
+    {
+        var game = await _db.Games.FindAsync(gameId);
+        if (game is null) return NotFound();
+
+        ViewBag.GameTitle = game.Title;
+
+        if (id is null)
+            return View(new UpsertAchievementDto { GameId = gameId });
+
+        var achievement = await _db.Achievements.FindAsync(id);
+        if (achievement is null) return NotFound();
+
+        return View(new UpsertAchievementDto
+        {
+            Id          = achievement.Id,
+            GameId      = achievement.GameId,
+            Name        = achievement.Name,
+            Description = achievement.Description,
+            IconUrl     = achievement.IconUrl,
+            Condition   = achievement.Condition,
+        });
+    }
+    
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> AchievementForm(UpsertAchievementDto dto)
+    {
+        var game = await _db.Games.FindAsync(dto.GameId);
+        if (game is null) return NotFound();
+
+        ViewBag.GameTitle = game.Title;
+
+        if (!ModelState.IsValid) return View(dto);
+
+        if (dto.Id is null)
+        {
+            _db.Achievements.Add(new ArcadeProject.Models.Achievement
+            {
+                GameId      = dto.GameId,
+                Name        = dto.Name,
+                Description = dto.Description,
+                IconUrl     = dto.IconUrl,
+                Condition   = dto.Condition,
+            });
+            TempData["Success"] = $"Odznaka \"{dto.Name}\" dodana.";
+        }
+        else
+        {
+            var achievement = await _db.Achievements.FindAsync(dto.Id);
+            if (achievement is null) return NotFound();
+
+            achievement.Name        = dto.Name;
+            achievement.Description = dto.Description;
+            achievement.IconUrl     = dto.IconUrl;
+            achievement.Condition   = dto.Condition;
+            TempData["Success"] = $"Odznaka \"{dto.Name}\" zaktualizowana.";
+        }
+
+        await _db.SaveChangesAsync();
+        return RedirectToAction(nameof(Achievements), new { gameId = dto.GameId });
+    }
+    
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteAchievement(int id)
+    {
+        var achievement = await _db.Achievements.FindAsync(id);
+        if (achievement is null) return NotFound();
+
+        var gameId = achievement.GameId;
+        _db.Achievements.Remove(achievement);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = $"Odznaka \"{achievement.Name}\" usunięta.";
+        return RedirectToAction(nameof(Achievements), new { gameId });
+    }
 }

@@ -10,7 +10,6 @@
     <span class="admin-badge">ADMIN</span>
 </div>
 
-<!-- ── STATYSTYKI ── -->
 <div class="admin-stats">
     <div class="admin-stat">
         <span class="admin-stat-val">@Model.TotalUsers</span>
@@ -30,7 +29,6 @@
     </div>
 </div>
 
-<!-- ── UŻYTKOWNICY ── -->
 <div class="admin-section">
     <div class="admin-section-title">UŻYTKOWNICY</div>
     <table class="admin-table">
@@ -67,7 +65,6 @@
                     </td>
                     <td>
                         <div class="admin-actions">
-                            @* Zmień rolę *@
                             <form asp-action="SetRole" method="post" style="margin:0">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="userId" value="@u.Id"/>
@@ -77,8 +74,7 @@
                                     @(u.Role == "Admin" ? "→ User" : "→ Admin")
                                 </button>
                             </form>
-
-                            @* Blokuj / odblokuj *@
+                            
                             <form asp-action="ToggleLock" method="post" style="margin:0"
                                   onsubmit="return confirm('@(u.IsLocked ? "Odblokować" : "Zablokować") konto @u.Username?')">
                                 @Html.AntiForgeryToken()
@@ -128,6 +124,8 @@
                         <div class="admin-actions">
                             <a class="btn-admin primary"
                                asp-action="GameForm" asp-route-id="@g.Id">Edytuj</a>
+                            <a class="btn-admin warning"
+                               asp-action="Achievements" asp-route-gameId="@g.Id">Odznaki</a>
 
                             <form asp-action="ToggleGame" method="post" style="margin:0">
                                 @Html.AntiForgeryToken()

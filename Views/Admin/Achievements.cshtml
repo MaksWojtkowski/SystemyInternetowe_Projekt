@@ -1,0 +1,83 @@
+﻿@model ArcadeProject.DTOs.AdminDTO.GameAchievementsDto
+@{ ViewData["Title"] = $"Odznaki — {Model.GameTitle}"; }
+
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true"/>
+
+<div class="admin-header">
+    <div>
+        <a href="/Admin" style="font-family:var(--ap-font-game);font-size:.5rem;
+           color:var(--ap-muted);text-decoration:none;letter-spacing:.08em">
+            &lt; PANEL ADMINA
+        </a>
+        <h1 class="admin-title" style="margin-top:.5rem">
+            ODZNAKI — @Model.GameTitle.ToUpper()
+        </h1>
+    </div>
+    <a class="btn-admin primary"
+       asp-action="AchievementForm"
+       asp-route-gameId="@Model.GameId"
+       style="padding:.5rem 1rem">
+        + NOWA ODZNAKA
+    </a>
+</div>
+
+@if (Model.Achievements.Any())
+{
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th style="width:40px">IKONA</th>
+                <th>NAZWA</th>
+                <th>OPIS</th>
+                <th>WARUNEK</th>
+                <th class="right">ODBLOKOWANO</th>
+                <th>AKCJE</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model.Achievements)
+            {
+                <tr>
+                    <td style="font-size:1.25rem;text-align:center">@(a.IconUrl ?? "🏅")</td>
+                    <td class="primary">@a.Name</td>
+                    <td>@a.Description</td>
+                    <td>
+                        <code style="font-size:.75rem;color:var(--ap-accent);
+                                     background:rgba(0,229,255,.08);
+                                     padding:.1rem .4rem;border-radius:4px">
+                            @a.Condition
+                        </code>
+                    </td>
+                    <td style="text-align:right;font-family:var(--ap-font-game);
+                               font-size:.55rem;color:var(--ap-muted)">
+                        @a.UnlockedCount ×
+                    </td>
+                    <td>
+                        <div class="admin-actions">
+                            <a class="btn-admin primary"
+                               asp-action="AchievementForm"
+                               asp-route-gameId="@Model.GameId"
+                               asp-route-id="@a.Id">
+                                Edytuj
+                            </a>
+                            <form asp-action="DeleteAchievement" method="post" style="margin:0"
+                                  onsubmit="return confirm('Usunąć odznakę @a.Name? Wszyscy gracze ją stracą.')">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@a.Id"/>
+                                <button type="submit" class="btn-admin danger">Usuń</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div style="text-align:center;padding:3rem;color:var(--ap-muted);font-size:.85rem">
+        Brak odznak dla tej gry.
+        <a asp-action="AchievementForm" asp-route-gameId="@Model.GameId"
+           style="color:var(--ap-accent)">Dodaj pierwszą</a>.
+    </div>
+}

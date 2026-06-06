@@ -1,0 +1,77 @@
+﻿@model ArcadeProject.DTOs.AdminDTO.UpsertAchievementDto
+@{ ViewData["Title"] = Model.Id is null ? "Nowa odznaka" : "Edytuj odznakę"; }
+
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true"/>
+
+<div style="max-width:560px;margin:2rem auto">
+    <a asp-action="Achievements" asp-route-gameId="@Model.GameId"
+       style="font-family:var(--ap-font-game);font-size:.5rem;color:var(--ap-muted);
+              text-decoration:none;letter-spacing:.08em">
+        &lt; ODZNAKI — @ViewBag.GameTitle
+    </a>
+
+    <h1 class="admin-title" style="margin:1rem 0">
+        @(Model.Id is null ? "NOWA ODZNAKA" : "EDYTUJ ODZNAKĘ")
+    </h1>
+
+    <div class="admin-form">
+        <form asp-action="AchievementForm" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="GameId"/>
+
+            <div class="admin-field">
+                <label class="admin-label" asp-for="Name">NAZWA</label>
+                <input class="admin-input" asp-for="Name" placeholder="np. Mistrz węża"/>
+                <span class="field-error" asp-validation-for="Name"></span>
+            </div>
+
+            <div class="admin-field">
+                <label class="admin-label" asp-for="Description">OPIS</label>
+                <input class="admin-input" asp-for="Description"
+                       placeholder="np. Zdobądź 200 punktów w jednej grze"/>
+                <span class="field-error" asp-validation-for="Description"></span>
+            </div>
+
+            <div class="admin-field">
+                <label class="admin-label" asp-for="IconUrl">IKONA (emoji)</label>
+                <input class="admin-input" asp-for="IconUrl"
+                       placeholder="np. 🏆 👑 ⭐"/>
+                <span style="font-size:.72rem;color:var(--ap-muted)">
+                    Wpisz dowolne emoji które pojawi się przy odznace.
+                </span>
+            </div>
+
+            <div class="admin-field">
+                <label class="admin-label" asp-for="Condition">WARUNEK</label>
+                <input class="admin-input" asp-for="Condition"
+                       placeholder="np. score>=100 lub duration>=60"/>
+                <span class="field-error" asp-validation-for="Condition"></span>
+                <div style="font-size:.72rem;color:var(--ap-muted);margin-top:.35rem;
+                            background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.1);
+                            border-radius:6px;padding:.5rem .75rem;line-height:1.8">
+                    Dostępne formaty:<br>
+                    <code style="color:var(--ap-accent)">score>=100</code> — wynik >= 100 pkt<br>
+                    <code style="color:var(--ap-accent)">score>500</code> — wynik > 500 pkt<br>
+                    <code style="color:var(--ap-accent)">duration>=60</code> — czas gry >= 60 sekund
+                </div>
+            </div>
+
+            <div class="admin-form-actions" style="margin-top:.5rem">
+                <button type="submit"
+                        style="font-family:var(--ap-font-game);font-size:.55rem;
+                               padding:.65rem 1.25rem;background:var(--ap-accent);
+                               color:#000;border:none;border-radius:6px;cursor:pointer">
+                    @(Model.Id is null ? "DODAJ ODZNAKĘ" : "ZAPISZ ZMIANY")
+                </button>
+                <a asp-action="Achievements" asp-route-gameId="@Model.GameId"
+                   style="font-family:var(--ap-font-game);font-size:.55rem;
+                          padding:.65rem 1rem;background:transparent;color:var(--ap-muted);
+                          border:1px solid var(--ap-border);border-radius:6px;
+                          text-decoration:none;display:inline-block">
+                    ANULUJ
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -27,8 +27,8 @@ public class HomeController : Controller
         var games = await _db.Games
             .Where(g => isAdmin || g.IsActive)
             .OrderByDescending(g => g.GameSessions
-                .Count(s => s.PlayedAt >= cutoff))  // sortuj po sesjach z ostatnich 30 dni
-            .ThenBy(g => g.Title)                   // remisy alfabetycznie
+                .Count(s => s.PlayedAt >= cutoff))
+            .ThenBy(g => g.Title)
             .Take(4)
             .Select(g => new GameDto
             {
@@ -46,7 +46,7 @@ public class HomeController : Controller
         {
             Games         = games,
             ShowAllGamesLink = true,
-            TotalGames    = games.Count,
+            TotalGames    = await _db.Games.CountAsync(g => isAdmin || g.IsActive),
             TotalSessions = await _db.GameSessions.CountAsync(),
             TotalUsers    = await _db.Users.CountAsync(),
             TotalThreads  = await _db.Threads.CountAsync(),
