@@ -1,4 +1,6 @@
 ﻿@model ArcadeProject.DTOs.ForumDTO.ForumIndexDto
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Loc
 @{ ViewData["Title"] = "Forum"; }
 
 <link rel="stylesheet" href="~/css/forum.css" asp-append-version="true"/>
@@ -7,25 +9,25 @@
     <div>
         <h1 class="forum-title">
             @if (Model.FilterGameTitle is not null)
-            { <span>FORUM — @Model.FilterGameTitle.ToUpper()</span> }
+            { <span>@Loc["PanelMain"]@Model.FilterGameTitle.ToUpper()</span> }
             else
-            { <span>FORUM GRACZY</span> }
+            { <span>@Loc["PanelSecond"]</span> }
         </h1>
-        <p class="forum-sub">Dyskusje o grach, strategie, bugi i wszystko inne.</p>
+        <p class="forum-sub">@Loc["PanelMainSub"]</p>
     </div>
     @if (User.Identity?.IsAuthenticated == true)
     {
         <a class="btn-new-thread"
            asp-action="Create"
            asp-route-gameId="@Model.FilterGameId">
-            + NOWY WĄTEK
+            @Loc["PanelCreateNew"]
         </a>
     }
 </div>
 
 <div class="forum-filters">
     <a class="filter-chip @(Model.FilterGameId is null ? "active" : "")"
-       asp-action="Index">Wszystkie</a>
+       asp-action="Index">@Loc["PanelCategoryAll"]</a>
     @foreach (var game in Model.Games)
     {
         <a class="filter-chip @(Model.FilterGameId == game.Id ? "active" : "")"
@@ -51,12 +53,12 @@
                     }
                 </div>
                 <div class="thread-item-meta">
-                    przez <span>@thread.AuthorName</span>
+                    @Loc["ThreadWho"] <span>@thread.AuthorName</span>
                     · @thread.CreatedAt.ToString("dd.MM.yyyy")
-                    · ostatnia aktywność @thread.LastPostAt.ToString("dd.MM.yyyy HH:mm")
+                    · @Loc["ThreadActivity"] @thread.LastPostAt.ToString("dd.MM.yyyy HH:mm")
                 </div>
                 <div class="thread-item-stats">
-                    <div class="stat-posts">postów: <span>@thread.PostCount</span></div>
+                    <div class="stat-posts">@Loc["ThreadCount"] <span>@thread.PostCount</span></div>
                 </div>
             </a>
         }
@@ -66,6 +68,6 @@ else
 {
     <div class="empty-forum">
         <div class="icon">💬</div>
-        <p>Brak wątków — bądź pierwszy!</p>
+        <p>@Loc["PanelNoThread"]</p>
     </div>
 }

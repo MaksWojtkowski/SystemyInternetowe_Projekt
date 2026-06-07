@@ -66,6 +66,38 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Play.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Forum\Index.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Index.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Forum\Index.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Index.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Forum\Thread.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Thread.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Forum\Thread.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Thread.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Forum\Editpost.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Editpost.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Forum\Editpost.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Editpost.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Forum\Create.pl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Create.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Views\Forum\Create.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Create.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -128,6 +160,46 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Play.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Forum\Index.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Index.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Forum\Index.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Index.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Forum\Thread.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Thread.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Forum\Thread.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Thread.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Forum\Editpost.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Editpost.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Forum\Editpost.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Editpost.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Forum\Create.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Create.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Views\Forum\Create.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Create.en.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

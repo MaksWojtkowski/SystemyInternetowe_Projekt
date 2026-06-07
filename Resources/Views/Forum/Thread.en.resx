@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true"/>
+    </xsd:schema>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <data name="PanelBackTo" xml:space="preserve">
+        <value>&amp;lt; BACK TO FORUM</value>
+    </data>
+    <data name="PanelInfo" xml:space="preserve">
+        <value>posts · created</value>
+    </data>
+    <data name="PostEditInfo" xml:space="preserve">
+        <value>edited</value>
+    </data>
+    <data name="PostEdit" xml:space="preserve">
+        <value>EDIT</value>
+    </data>
+    <data name="PostDelete" xml:space="preserve">
+        <value>DELETE</value>
+    </data>
+    <data name="PostResponse" xml:space="preserve">
+        <value>YOUR REPLY</value>
+    </data>
+    <data name="PostSend" xml:space="preserve">
+        <value>SEND A REPLY</value>
+    </data>
+    <data name="PostLogin" xml:space="preserve">
+        <value>Login</value>
+    </data>
+    <data name="PostLoginSub" xml:space="preserve">
+        <value>to send reply.</value>
+    </data>
+</root>

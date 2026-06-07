@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true"/>
+    </xsd:schema>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <data name="CreateThread" xml:space="preserve">
+        <value>NEW THREAD</value>
+    </data>
+    <data name="CreateCategory" xml:space="preserve">
+        <value>CATEGORY (optional)</value>
+    </data>
+    <data name="CreateCategoryDefault" xml:space="preserve">
+        <value>— General Forum —</value>
+    </data>
+    <data name="CreateTitle" xml:space="preserve">
+        <value>THREAD TITLE</value>
+    </data>
+    <data name="CreateTitlePlaceholder" xml:space="preserve">
+        <value>What do you want to talk about?</value>
+    </data>
+    <data name="CreateContent" xml:space="preserve">
+        <value>Contents</value>
+    </data>
+    <data name="CreateContentPlaceholder" xml:space="preserve">
+        <value>Write your post...</value>
+    </data>
+    <data name="CreateSend" xml:space="preserve">
+        <value>POST A THREAD</value>
+    </data>
+    <data name="CreateCancel" xml:space="preserve">
+        <value>CANCEL</value>
+    </data>
+</root>

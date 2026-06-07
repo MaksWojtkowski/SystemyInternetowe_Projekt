@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true"/>
+    </xsd:schema>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <data name="PanelMain" xml:space="preserve">
+        <value>FORUM — </value>
+    </data>
+    <data name="PanelSecond" xml:space="preserve">
+        <value>PLAYERS FORUM</value>
+    </data>
+    <data name="PanelMainSub" xml:space="preserve">
+        <value>Game discussions, strategies, bugs and everything else.</value>
+    </data>
+    <data name="PanelCategoryAll" xml:space="preserve">
+        <value>All</value>
+    </data>
+    <data name="PanelCreateNew" xml:space="preserve">
+        <value>+ NEW THREAD</value>
+    </data>
+    <data name="PanelNoThread" xml:space="preserve">
+        <value>No threads - be the first!</value>
+    </data>
+    <data name="ThreadWho" xml:space="preserve">
+        <value>by</value>
+    </data>
+    <data name="ThreadActivity" xml:space="preserve">
+        <value>recent activity</value>
+    </data>
+    <data name="ThreadCount" xml:space="preserve">
+        <value>posts: </value>
+    </data>
+</root>

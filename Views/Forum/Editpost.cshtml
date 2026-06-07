@@ -1,10 +1,12 @@
 ﻿@model ArcadeProject.DTOs.ForumDTO.EditPostDto
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Loc
 @{ ViewData["Title"] = "Edytuj post"; }
 
 <link rel="stylesheet" href="~/css/forum.css" asp-append-version="true"/>
 
 <div class="forum-form-page">
-    <h1 class="forum-form-title">EDYTUJ POST</h1>
+    <h1 class="forum-form-title">@Loc["EditPost"]</h1>
 
     <div class="forum-form-card">
         <form asp-action="EditPost" method="post">
@@ -12,7 +14,7 @@
             <input type="hidden" asp-for="PostId"/>
 
             <div class="forum-form-field">
-                <label class="forum-form-label" asp-for="Body">TREŚĆ</label>
+                <label class="forum-form-label" asp-for="Body">@Loc["EditContent"]</label>
                 <textarea class="forum-textarea" asp-for="Body"
                           maxlength="5000"
                           oninput="updateCount(this)"
@@ -24,8 +26,8 @@
             </div>
 
             <div class="forum-form-actions">
-                <button type="submit" class="btn-forum-submit">ZAPISZ ZMIANY</button>
-                <a class="btn-forum-cancel" onclick="history.back()">ANULUJ</a>
+                <button type="submit" class="btn-forum-submit">@Loc["EditSave"]</button>
+                <a class="btn-forum-cancel" onclick="history.back()">@Loc["EditCancel"]</a>
             </div>
         </form>
     </div>

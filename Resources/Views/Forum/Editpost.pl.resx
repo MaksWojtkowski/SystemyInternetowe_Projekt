@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true"/>
+    </xsd:schema>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <data name="EditPost" xml:space="preserve">
+        <value>EDYTUJ POST</value>
+    </data>
+    <data name="EditContent" xml:space="preserve">
+        <value>TREŚĆ</value>
+    </data>
+    <data name="EditSave" xml:space="preserve">
+        <value>ZAPISZ ZMIANY</value>
+    </data>
+    <data name="EditCancel" xml:space="preserve">
+        <value>ANULUJ</value>
+    </data>
+</root>

@@ -1,10 +1,12 @@
 ﻿@model ArcadeProject.DTOs.ForumDTO.CreateThreadDto
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Loc
 @{ ViewData["Title"] = "Nowy wątek"; }
 
 <link rel="stylesheet" href="~/css/forum.css" asp-append-version="true"/>
 
 <div class="forum-form-page">
-    <h1 class="forum-form-title">NOWY WĄTEK</h1>
+    <h1 class="forum-form-title">@Loc["CreateThread"]</h1>
 
     <div class="forum-form-card">
 
@@ -23,9 +25,9 @@
             @Html.AntiForgeryToken()
             
             <div class="forum-form-field">
-                <label class="forum-form-label">KATEGORIA (opcjonalnie)</label>
+                <label class="forum-form-label">@Loc["CreateCategory"]</label>
                 <select class="forum-form-select" asp-for="GameId">
-                    <option value="">— Ogólne forum —</option>
+                    <option value="">@Loc["CreateCategoryDefault"]</option>
                     @foreach (var game in (IEnumerable<ArcadeProject.DTOs.GameDto>)ViewBag.Games)
                     {
                         <option value="@game.Id"
@@ -37,16 +39,16 @@
             </div>
             
             <div class="forum-form-field">
-                <label class="forum-form-label" asp-for="Title">TYTUŁ WĄTKU</label>
+                <label class="forum-form-label" asp-for="Title">@Loc["CreateTitle"]</label>
                 <input class="forum-form-input" asp-for="Title"
-                       placeholder="O czym chcesz porozmawiać?" maxlength="200"/>
+                       placeholder="@Loc["CreateTitlePlaceholder"]" maxlength="200"/>
                 <span class="field-error" asp-validation-for="Title"></span>
             </div>
             
             <div class="forum-form-field">
-                <label class="forum-form-label" asp-for="Body">TREŚĆ</label>
+                <label class="forum-form-label" asp-for="Body">@Loc["CreateContent"]</label>
                 <textarea class="forum-textarea" asp-for="Body"
-                          placeholder="Napisz swój post..."
+                          placeholder="@Loc["CreateContentPlaceholder"]"
                           maxlength="5000"
                           oninput="updateCount(this)"
                           style="min-height:180px"></textarea>
@@ -57,9 +59,9 @@
             </div>
 
             <div class="forum-form-actions">
-                <button type="submit" class="btn-forum-submit">OPUBLIKUJ WĄTEK</button>
+                <button type="submit" class="btn-forum-submit">@Loc["CreateSend"]</button>
                 <a class="btn-forum-cancel" asp-action="Index"
-                   asp-route-gameId="@Model.GameId">ANULUJ</a>
+                   asp-route-gameId="@Model.GameId">@Loc["CreateCancel"]</a>
             </div>
         </form>
     </div>
