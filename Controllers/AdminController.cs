@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -58,11 +58,25 @@ public class AdminController : Controller
             })
             .ToListAsync();
 
+        var recentThreads = await _db.Threads
+            .OrderByDescending(t => t.CreatedAt)
+            .Take(50)
+            .Select(t => new ThreadSummaryDto
+            {
+                Id         = t.Id,
+                Title      = t.Title,
+                AuthorName = t.User.UserName ?? "?",
+                PostCount  = t.Posts.Count(),
+                CreatedAt  = t.CreatedAt,
+            })
+            .ToListAsync();
+
         return View(new AdminIndexDto
         {
-            Users        = userDtos,
-            Games        = games,
-            TotalUsers   = userDtos.Count,
+            Users         = userDtos,
+            Games         = games,
+            RecentThreads = recentThreads,
+            TotalUsers    = userDtos.Count,
             TotalSessions = await _db.GameSessions.CountAsync(),
             TotalThreads  = await _db.Threads.CountAsync(),
             TotalPosts    = await _db.Posts.CountAsync(),
@@ -320,5 +334,90 @@ public class AdminController : Controller
 
         TempData["Success"] = $"Odznaka \"{achievement.Name}\" usunięta.";
         return RedirectToAction(nameof(Achievements), new { gameId });
+    }
+    
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteUser(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            TempData["Error"] = "Użytkownik nie istnieje.";
+            return RedirectToAction(nameof(Index));
+        }
+        
+        if (user.Id == _userManager.GetUserId(User))
+        {
+            TempData["Error"] = "Nie możesz usunąć własnego konta.";
+            return RedirectToAction(nameof(Index));
+        }
+        
+        if (await _userManager.IsInRoleAsync(user, "Admin"))
+        {
+            TempData["Error"] = $"Nie można usunąć konta admina ({user.UserName}). Najpierw zmień mu rolę na User.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var username = user.UserName ?? userId;
+        
+        var result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            TempData["Error"] = $"Błąd podczas usuwania konta: {errors}";
+            return RedirectToAction(nameof(Index));
+        }
+
+        TempData["Success"] = $"Konto użytkownika \"{username}\" zostało usunięte.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ── USUWANIE POSTÓW FORUM ─────────────────────────────────────────────────
+    
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeletePost(int postId, int? threadId = null)
+    {
+        var post = await _db.Posts
+            .Include(p => p.Thread)
+            .FirstOrDefaultAsync(p => p.Id == postId);
+
+        if (post is null)
+        {
+            TempData["Error"] = "Post nie istnieje.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var returnThreadId = threadId ?? post.ThreadId;
+
+        _db.Posts.Remove(post);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = "Post został usunięty.";
+        
+        if (Request.Headers["Referer"].ToString().Contains("/Forum/"))
+            return Redirect(Url.Action("Thread", "Forum", new { id = returnThreadId })!);
+
+        return RedirectToAction(nameof(Index));
+    }
+    
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteThread(int threadId)
+    {
+        var thread = await _db.Threads
+            .Include(t => t.Posts)
+            .FirstOrDefaultAsync(t => t.Id == threadId);
+
+        if (thread is null)
+        {
+            TempData["Error"] = "Wątek nie istnieje.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var title = thread.Title;
+        _db.Threads.Remove(thread);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = $"Wątek \"{title}\" i wszystkie jego posty zostały usunięte.";
+        return RedirectToAction(nameof(Index));
     }
 }
