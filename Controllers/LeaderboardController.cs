@@ -10,11 +10,13 @@ public class LeaderboardController : Controller
 {
     private readonly AppDbContext _db;
     private readonly IMemoryCache _cache;
+    private readonly ILogger<ForumController> _logger;
 
-    public LeaderboardController(AppDbContext db, IMemoryCache cache)
+    public LeaderboardController(AppDbContext db, IMemoryCache cache,  ILogger<ForumController> logger)
     {
         _db    = db;
         _cache = cache;
+        _logger = logger;
     }
     
     public async Task<IActionResult> Index()
@@ -24,6 +26,8 @@ public class LeaderboardController : Controller
             entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2);
             return await BuildLeaderboardAsync();
         }) ?? await BuildLeaderboardAsync();
+        
+        _logger.LogInformation("Strona rankingów załadowana.");
 
         return View(dto);
     }

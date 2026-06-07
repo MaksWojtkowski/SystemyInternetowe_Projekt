@@ -9,6 +9,10 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
+      - Logging__LogLevel__Default=Information
+      - Logging__LogLevel__Microsoft.AspNetCore=Warning
+      - Logging__LogLevel__Microsoft.EntityFrameworkCore=Warning
+
       - ConnectionStrings__DefaultConnection=Data Source=/Data/arcade.db
       - Seed__AdminUsername=admin
       - Seed__AdminEmail=admin@arcadeportal.pl
