@@ -1,4 +1,4 @@
-﻿@model ArcadeProject.DTOs.AdminDTO.AdminIndexDto
+@model ArcadeProject.DTOs.AdminDTO.AdminIndexDto
 @{ ViewData["Title"] = "Panel admina"; }
 
 <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true"/>
@@ -84,6 +84,16 @@
                                     @(u.IsLocked ? "Odblokuj" : "Zablokuj")
                                 </button>
                             </form>
+                            
+                            @if (u.Role != "Admin")
+                            {
+                                <form asp-action="DeleteUser" method="post" style="margin:0"
+                                      onsubmit="return confirm('Usunąć konto @u.Username? Ta operacja jest nieodwracalna i usunie wszystkie wyniki i posty użytkownika!')">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="userId" value="@u.Id"/>
+                                    <button type="submit" class="btn-admin danger">Usuń konto</button>
+                                </form>
+                            }
                         </div>
                     </td>
                 </tr>
@@ -134,6 +144,46 @@
                                         class="btn-admin @(g.IsActive ? "warning" : "success")">
                                     @(g.IsActive ? "Wyłącz" : "Włącz")
                                 </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="admin-section">
+    <div class="admin-section-title">POSTY I WĄTKI FORUM</div>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>WĄTEK</th>
+                <th>AUTOR</th>
+                <th>POSTÓW</th>
+                <th>DATA</th>
+                <th>AKCJE</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model.RecentThreads)
+            {
+                <tr>
+                    <td class="primary">@t.Title</td>
+                    <td>@t.AuthorName</td>
+                    <td>@t.PostCount</td>
+                    <td>@t.CreatedAt.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <div class="admin-actions">
+                            <a class="btn-admin primary"
+                               asp-controller="Forum" asp-action="Thread"
+                               asp-route-id="@t.Id">Zobacz</a>
+
+                            <form asp-action="DeleteThread" method="post" style="margin:0"
+                                  onsubmit="return confirm('Usunąć wątek i wszystkie jego posty?')">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="threadId" value="@t.Id"/>
+                                <button type="submit" class="btn-admin danger">Usuń wątek</button>
                             </form>
                         </div>
                     </td>
