@@ -104,7 +104,7 @@ public class AccountController : Controller
 
         if (result.IsLockedOut)
         {
-            ModelState.AddModelError(string.Empty, "Konto zablokowane po zbyt wielu nieudanych próbach. Spróbuj za chwilę.");
+            ModelState.AddModelError(string.Empty, "Konto zablokowane.");
             return View(dto);
         }
 
@@ -121,7 +121,7 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    // ── RESET HASŁA — formularz email ─────────────────────────────────
+    // ── RESET─────────────────────────────────
 
     [HttpGet]
     public IActionResult ForgotPassword() => View();
@@ -145,8 +145,6 @@ public class AccountController : Controller
         TempData["Success"] = "Jeśli podany email istnieje w systemie, wysłaliśmy link do resetowania hasła.";
         return RedirectToAction(nameof(Login));
     }
-
-    // ── RESET HASŁA — nowe hasło ─────────────────────────────────────
 
     [HttpGet]
     public IActionResult ResetPassword(string userId, string token)

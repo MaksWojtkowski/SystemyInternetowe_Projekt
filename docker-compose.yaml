@@ -1,0 +1,52 @@
+﻿services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: arcadeportal
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+      - Logging__LogLevel__Default=Information
+      - Logging__LogLevel__Microsoft.AspNetCore=Warning
+      - Logging__LogLevel__Microsoft.EntityFrameworkCore=Warning
+
+      - ConnectionStrings__DefaultConnection=Data Source=/Data/arcade.db
+      - Seed__AdminUsername=admin
+      - Seed__AdminEmail=admin@arcadeportal.pl
+      - Seed__AdminPassword=Admin123!
+
+      - Email__Host=mailpit
+      - Email__Port=1025
+      - Email__Username=
+      - Email__Password=
+      - Email__FromAddress=noreply@arcadeportal.pl
+      - Email__FromName=ArcadePortal
+      - Email__UseTls=false
+
+    volumes:
+      - db-data:/Data
+
+    depends_on:
+      - mailpit
+
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: arcadeportal-mail
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    environment:
+      - MP_MAX_MESSAGES=200
+      - MP_DATA_FILE=/data/mailpit.db
+    volumes:
+      - mail-data:/data
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  mail-data:

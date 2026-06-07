@@ -95,6 +95,7 @@ public static class DbSeeder
             Description = "Klasyczna gra węża. Zjedz jak najwięcej i nie wpadnij w ścianę!",
             IsActive = true,
             CreatedAt = DateTime.UtcNow,
+            ThumbnailUrl = "https://images.igdb.com/igdb/image/upload/t_cover_big/co6rbq.webp",
         };
 
         snake.Achievements.Add(new Achievement
@@ -122,22 +123,26 @@ public static class DbSeeder
         db.Games.Add(new Game
         {
             Slug = "tetris", Title = "Tetris", IsActive = true, CreatedAt = DateTime.UtcNow,
-            Description = "Układaj klocki i usuwaj pełne rzędy. Im szybciej, tym lepiej."
+            Description = "Układaj klocki i usuwaj pełne rzędy. Im szybciej, tym lepiej.",
+            ThumbnailUrl = "https://images.igdb.com/igdb/image/upload/t_cover_big/co3a78.webp"
         });
         db.Games.Add(new Game
         {
             Slug = "flappy", Title = "Flappy Bird", IsActive = true, CreatedAt = DateTime.UtcNow,
-            Description = "Przelec przez jak najwięcej rur. Jeden błąd i koniec!"
+            Description = "Przelec przez jak najwięcej rur. Jeden błąd i koniec!",
+            ThumbnailUrl = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9nda.webp"
         });
         db.Games.Add(new Game
         {
             Slug = "pacman", Title = "Pac-Man", IsActive = true, CreatedAt = DateTime.UtcNow,
-            Description = "Zjedz wszystkie kulki i uciekaj przed duchami!"
+            Description = "Zjedz wszystkie kulki i uciekaj przed duchami!",
+            ThumbnailUrl = "https://images.igdb.com/igdb/image/upload/t_cover_big/co7opo.webp"
         });
         db.Games.Add(new Game
         {
             Slug = "blackjack", Title = "Blackjack", IsActive = true, CreatedAt = DateTime.UtcNow,
-            Description = "Dobierz karty tak żeby suma wyniosła jak najbliżej 21."
+            Description = "Dobierz karty tak żeby suma wyniosła jak najbliżej 21.",
+            ThumbnailUrl = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9ygq.webp"
         });
 
         await db.SaveChangesAsync();
@@ -207,7 +212,7 @@ public static class DbSeeder
             {
                 double progress = (double)i / sessionCount;
                 int score = (int)(Rng.Next(maxScore / 10, maxScore) * (0.3 + 0.7 * progress));
-                score = Math.Max(score, 10);
+                score = Math.Max(score, 0);
 
                 sessions.Add(new GameSession
                 {

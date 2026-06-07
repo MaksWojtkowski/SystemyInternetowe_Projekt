@@ -79,6 +79,8 @@ public class ForumController : Controller
             FilterGameId    = gameId,
             FilterGameTitle = filterTitle,
         };
+        
+        _logger.LogInformation("Strona forum załądowana, ilość wątków: {Count}", threads.Count);
 
         return View(dto);
     }
@@ -206,6 +208,7 @@ public class ForumController : Controller
         _db.Posts.Add(post);
         await _db.SaveChangesAsync();
 
+        _logger.LogInformation("Nowy post #{Id} od {User}", thread.Id, user.UserName);
 
         return Redirect(Url.Action(nameof(Thread), new { id = post.ThreadId })
                         + $"#post-{post.Id}");

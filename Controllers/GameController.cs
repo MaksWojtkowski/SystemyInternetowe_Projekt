@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using ArcadeProject.Data;
 using ArcadeProject.DTOs;
 using ArcadeProject.Services;
+using Microsoft.Extensions.Localization;
 
 namespace ArcadeProject.Controllers;
 
@@ -13,13 +14,15 @@ public class GameController : Controller
     private readonly IMemoryCache _cache;
     private readonly ILogger<GameController> _logger;
     private readonly AchievementService _achievements;
+    private readonly IStringLocalizer<HomeController> _loc;
 
-    public GameController(AppDbContext db, IMemoryCache cache, ILogger<GameController> logger, AchievementService achievements)
+    public GameController(AppDbContext db, IMemoryCache cache, ILogger<GameController> logger, AchievementService achievements, IStringLocalizer<HomeController> loc)
     {
         _db     = db;
         _cache  = cache;
         _logger = logger;
         _achievements = achievements;
+        _loc = loc;
     }
     
     public async Task<IActionResult> Index()
@@ -40,6 +43,8 @@ public class GameController : Controller
                 IsActive      = g.IsActive,
             })
             .ToListAsync();
+        
+        _logger.LogInformation(_loc["LogLoaded"], games.Count, games.Sum(g => g.TotalSessions));
 
         return View(games);
     }
@@ -75,7 +80,7 @@ public class GameController : Controller
                 .Take(10)
                 .Select(s => new LeaderboardEntryDto
                 {
-                    Rank     = 0,           // nadajemy poniżej
+                    Rank     = 0,
                     Username = s.User.UserName ?? "Anonim",
                     Score    = s.Score,
                     PlayedAt = s.PlayedAt
